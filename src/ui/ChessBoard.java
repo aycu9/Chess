@@ -95,7 +95,7 @@ public class ChessBoard implements Drawable, Clickable {
                     } else {
                         currentState.destinationSquare = boardGrid[xCor][yCor];
                         currentState.destinationSquare.setChessPiece(currentState.selectedSquare.getChessPiece());
-                        currentState.selectedSquare.setChessPiece(null);
+//                        currentState.selectedSquare.setChessPiece(null);
                         currentState.selectedSquare.setGridSelected(false);
                     }
                 }
