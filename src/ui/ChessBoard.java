@@ -88,15 +88,9 @@ public class ChessBoard implements Drawable, Clickable {
                 if (x / gridSize == xCor && y / gridSize == yCor) {
                     boardGrid[xCor][yCor].click(x, y);
                     if (currentState.selectedSquare == null) {
-                        if (boardGrid[xCor][yCor].thereIsChessPiece()) {
-                            currentState.selectedSquare = boardGrid[xCor][yCor];
-                            boardGrid[xCor][yCor].setGridSelected(true);
-                        }
+                        currentState.selectedSquare = boardGrid[xCor][yCor];
                     } else {
                         currentState.destinationSquare = boardGrid[xCor][yCor];
-                        currentState.destinationSquare.setChessPiece(currentState.selectedSquare.getChessPiece());
-//                        currentState.selectedSquare.setChessPiece(null);
-                        currentState.selectedSquare.setGridSelected(false);
                     }
                 }
             }

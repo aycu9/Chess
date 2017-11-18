@@ -8,7 +8,7 @@ import ui.Clickable;
 /**
  * Created by Libra on 2017-09-30.
  */
-public class ChessGame implements Clickable{
+public class ChessGame implements Clickable {
     private ChessBoard board;
     private GraphicsContext gc;
     private final int windowWidth;
@@ -31,9 +31,9 @@ public class ChessGame implements Clickable{
 
     }
 
-    public void drawUiElements (){
-        int boardOrigin = (windowWidth - board.getWidth())/2;
-        gc.translate(boardOrigin,0);
+    public void drawUiElements() {
+        int boardOrigin = (windowWidth - board.getWidth()) / 2;
+        gc.translate(boardOrigin, 0);
         board.draw(gc);
         gc.translate(-boardOrigin, 0);
     }
@@ -41,16 +41,40 @@ public class ChessGame implements Clickable{
 
     @Override
     public void click(int x, int y) {
-        int boardOriginX = (windowWidth - board.getWidth())/2;  //80
+        int boardOriginX = (windowWidth - board.getWidth()) / 2;  //80
         int boardEndX = boardOriginX + board.getWidth();  //720
         int boardOriginY = windowHeight - board.getHeight();  //0
         int boardEndY = boardOriginY + board.getHeight();    //640
-        if(x >= boardOriginX && x <= boardEndX){
-            if(y >= boardOriginY && y <= boardEndY){
-                board.click(x - boardOriginX,y - boardOriginY);
+        if (x >= boardOriginX && x <= boardEndX) {
+            if (y >= boardOriginY && y <= boardEndY) {
+                board.click(x - boardOriginX, y - boardOriginY);
             }
         }
-        drawUiElements();
+        updateGameState();
         drawUiElements();
     }
+
+    private void updateGameState() {
+        if (board.getCurrentState().selectedSquare != null) {
+            if (board.getCurrentState().selectedSquare.thereIsChessPiece()) {
+                board.getCurrentState().selectedSquare.setGridSelected(true);
+            } else {
+                board.getCurrentState().selectedSquare = null;
+            }
+            if (board.getCurrentState().destinationSquare != null) {
+                if (board.getCurrentState().destinationSquare != board.getCurrentState().selectedSquare) {
+                    board.getCurrentState().destinationSquare.setChessPiece(board.getCurrentState().selectedSquare.getChessPiece());
+                    board.getCurrentState().selectedSquare.setChessPiece(null);
+                    board.getCurrentState().selectedSquare.setGridSelected(false);
+                    board.getCurrentState().selectedSquare = null;
+                    board.getCurrentState().destinationSquare = null;
+                } else {
+                    board.getCurrentState().destinationSquare = null;
+                }
+            }
+
+        }
+
+    }
+
 }
