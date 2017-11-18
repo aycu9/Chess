@@ -51,4 +51,8 @@ public abstract class ChessPiece implements Drawable {
     public int getHeight() {
         return size;
     }
+
+    public Team getTeam() {
+        return team;
+    }
 }

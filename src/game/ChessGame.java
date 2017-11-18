@@ -56,7 +56,7 @@ public class ChessGame implements Clickable {
 
     private void updateGameState() {
         if (board.getCurrentState().selectedSquare != null) {
-            if (board.getCurrentState().selectedSquare.thereIsChessPiece()) {
+            if (this.allowedToSelectSquare()) {
                 board.getCurrentState().selectedSquare.setGridSelected(true);
             } else {
                 board.getCurrentState().selectedSquare = null;
@@ -68,6 +68,7 @@ public class ChessGame implements Clickable {
                     board.getCurrentState().selectedSquare.setGridSelected(false);
                     board.getCurrentState().selectedSquare = null;
                     board.getCurrentState().destinationSquare = null;
+                    this.swapCurrentTeam();
                 } else {
                     board.getCurrentState().destinationSquare = null;
                 }
@@ -75,6 +76,24 @@ public class ChessGame implements Clickable {
 
         }
 
+    }
+
+    private boolean allowedToSelectSquare (){
+        if(!board.getCurrentState().selectedSquare.thereIsChessPiece()) { //if false
+            return false;
+        }
+        if(board.getCurrentState().selectedSquare.getChessPiece().getTeam() != board.getCurrentState().currentTeam){ //if not the same
+            return false;
+        }
+        return true;
+    }
+
+    private void swapCurrentTeam(){
+        if(board.getCurrentState().currentTeam == team1){
+            board.getCurrentState().currentTeam = team2;
+        }
+        else
+            board.getCurrentState().currentTeam = team1;
     }
 
 }
