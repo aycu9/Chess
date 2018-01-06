@@ -12,6 +12,7 @@ public class GridSquare implements Drawable, Clickable {
     private final int gridSquareSize;
     private boolean gridSelected;
     private int borderWidth;
+    private boolean gridSelectedForLegalMoves;
 
     public GridSquare(Color background, int gridSquareSize) {
         this.background = background;
@@ -29,21 +30,35 @@ public class GridSquare implements Drawable, Clickable {
 
     @Override
     public void draw(GraphicsContext gc) {
-        borderWidth = gridSquareSize/10;
+        borderWidth = gridSquareSize / 10;
         gc.setFill(background);
         gc.fillRect(0, 0, gridSquareSize, gridSquareSize);
         if (chessPiece != null) {
             chessPiece.draw(gc);
         }
-        if(isGridSelected()){
+        if (isGridSelected()) {
+            gc.setStroke(Color.PURPLE);
+            gc.setLineWidth(borderWidth);
+            gc.strokeRect(borderWidth / 2, borderWidth / 2, gridSquareSize - borderWidth, gridSquareSize - borderWidth);
+        }
+        if (isSelectedForLegalMoves()) {
             gc.setStroke(Color.GREEN);
             gc.setLineWidth(borderWidth);
-            gc.strokeRect(borderWidth/2, borderWidth/2, gridSquareSize-borderWidth, gridSquareSize-borderWidth);
+            gc.strokeRect(borderWidth / 2, borderWidth / 2, gridSquareSize - borderWidth, gridSquareSize - borderWidth);
         }
     }
 
-    public boolean thereIsChessPiece(){
+    public boolean hasChessPiece() {
         return getChessPiece() != null;
+    }
+
+    public void setGridSelectedForLegalMoves(boolean gridSelectedForLegalMoves) {
+        this.gridSelectedForLegalMoves = gridSelectedForLegalMoves;
+    }
+
+    private boolean isSelectedForLegalMoves() {
+        return gridSelectedForLegalMoves;
+
     }
 
     @Override
@@ -64,7 +79,7 @@ public class GridSquare implements Drawable, Clickable {
         this.gridSelected = gridSelected;
     }
 
-    public boolean isGridSelected() {
+    private boolean isGridSelected() {
         return gridSelected;
     }
 }

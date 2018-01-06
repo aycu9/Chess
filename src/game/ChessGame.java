@@ -4,6 +4,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import ui.ChessBoard;
 import ui.Clickable;
+import ui.GridSquare;
+
+import java.util.List;
 
 /**
  * Created by Libra on 2017-09-30.
@@ -62,13 +65,15 @@ public class ChessGame implements Clickable {
                 board.getCurrentState().selectedSquare = null;
             }
             if (board.getCurrentState().destinationSquare != null) {
-                if (board.getCurrentState().destinationSquare != board.getCurrentState().selectedSquare) {
+                if (allowedToMoveHere()) {
+                    Move recentMove = new Move(board.getCurrentState().selectedSquare, board.getCurrentState().destinationSquare);
                     board.getCurrentState().destinationSquare.setChessPiece(board.getCurrentState().selectedSquare.getChessPiece());
                     board.getCurrentState().selectedSquare.setChessPiece(null);
                     board.getCurrentState().selectedSquare.setGridSelected(false);
                     board.getCurrentState().selectedSquare = null;
                     board.getCurrentState().destinationSquare = null;
                     this.swapCurrentTeam();
+                    board.getCurrentState().pastMoves.add(recentMove);
                 } else {
                     board.getCurrentState().destinationSquare = null;
                 }
@@ -78,21 +83,32 @@ public class ChessGame implements Clickable {
 
     }
 
-    private boolean allowedToSelectSquare (){
-        if(!board.getCurrentState().selectedSquare.thereIsChessPiece()) { //if false
+    private boolean allowedToSelectSquare() {
+        if (!board.getCurrentState().selectedSquare.hasChessPiece()) { //if false
             return false;
         }
-        if(board.getCurrentState().selectedSquare.getChessPiece().getTeam() != board.getCurrentState().currentTeam){ //if not the same
+        if (!board.getCurrentState().selectedSquare.getChessPiece().getTeam().isSameTeam(board.getCurrentState().currentTeam)) { //if not same team
+            return false;
+        }
+        if(board.getCurrentState().selectedSquare.getChessPiece().getLegalMoves(board).isEmpty()){ //if no legal moves
             return false;
         }
         return true;
     }
 
-    private void swapCurrentTeam(){
-        if(board.getCurrentState().currentTeam == team1){
-            board.getCurrentState().currentTeam = team2;
+    private boolean allowedToMoveHere() {
+        List<GridSquare> legalMoves = board.getCurrentState().selectedSquare.getChessPiece().getLegalMoves(board);
+        if (legalMoves.contains(board.getCurrentState().destinationSquare)) {
+            return true;
+        } else {
+            return false;
         }
-        else
+    }
+
+    private void swapCurrentTeam() {
+        if (board.getCurrentState().currentTeam == team1) {
+            board.getCurrentState().currentTeam = team2;
+        } else
             board.getCurrentState().currentTeam = team1;
     }
 

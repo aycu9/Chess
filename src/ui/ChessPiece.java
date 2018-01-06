@@ -1,5 +1,6 @@
 package ui;
 
+import game.Move;
 import game.Team;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
@@ -8,6 +9,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+
+import java.util.List;
 
 /**
  * Created by Libra on 2017-10-14.
@@ -55,4 +58,6 @@ public abstract class ChessPiece implements Drawable {
     public Team getTeam() {
         return team;
     }
+
+    public abstract List<GridSquare> getLegalMoves (ChessBoard chessBoard);
 }
