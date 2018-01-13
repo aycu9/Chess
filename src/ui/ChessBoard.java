@@ -7,6 +7,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import ui.pieces.Knight;
 import ui.pieces.Pawn;
+import ui.pieces.Rook;
 
 import java.util.List;
 
@@ -112,6 +113,11 @@ public class ChessBoard implements Drawable, Clickable {
         boardGrid[6][7].setChessPiece(new Knight(team1.getTeamColor(), team1, boardSize / GRID_SIZE));
         boardGrid[6][0].setChessPiece(new Knight(team2.getTeamColor(), team2, boardSize / GRID_SIZE));
         boardGrid[1][0].setChessPiece(new Knight(team2.getTeamColor(), team2, boardSize / GRID_SIZE));
+        //create rooks
+        boardGrid[0][0].setChessPiece(new Rook(team2.getTeamColor(), team2, boardSize / GRID_SIZE));
+        boardGrid[7][0].setChessPiece(new Rook(team2.getTeamColor(), team2, boardSize / GRID_SIZE));
+        boardGrid[0][7].setChessPiece(new Rook(team1.getTeamColor(), team1, boardSize / GRID_SIZE));
+        boardGrid[7][7].setChessPiece(new Rook(team1.getTeamColor(), team1, boardSize / GRID_SIZE));
     }
 
     @Override
