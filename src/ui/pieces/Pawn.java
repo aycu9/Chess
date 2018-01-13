@@ -51,9 +51,6 @@ public class Pawn extends ChessPiece {
             }
         }
 
-
-
-
         if (diagonalOccupationStatus(chessBoard).equals("Both")) {
             moves.add(chessBoard.getGridSquare(currentColumn + 1, currentRow + direction));
             moves.add(chessBoard.getGridSquare(currentColumn - 1, currentRow + direction));
@@ -61,7 +58,6 @@ public class Pawn extends ChessPiece {
             moves.add(chessBoard.getGridSquare(currentColumn - 1, currentRow + direction));
         } else if (diagonalOccupationStatus(chessBoard).equals("Right")) {
             moves.add(chessBoard.getGridSquare(currentColumn + 1, currentRow + direction));
-
         }
         return moves;
     }
