@@ -7,7 +7,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 import java.util.List;
@@ -60,4 +59,22 @@ public abstract class ChessPiece implements Drawable {
     }
 
     public abstract List<GridSquare> getLegalMoves (ChessBoard chessBoard);
+
+    protected void legalMovesAdder(GridSquare gridSquare, List<GridSquare> moves) {
+        if (gridSquare != null && !gridSquare.hasChessPiece()) { //Not null and Not occupied by a chess piece
+            moves.add(gridSquare);
+        } else if (gridSquare != null && gridSquare.hasChessPiece() && !gridSquare.getChessPiece().getTeam().isSameTeam(this.getTeam())) { //Not null and enemy
+            moves.add(gridSquare);
+        }
+    }
+
+    public boolean hasPieceMoved (ChessBoard chessBoard) {
+        List<Move> pastMoves = chessBoard.getCurrentState().pastMoves;
+        for (Move pastMove : pastMoves) {
+            if (pastMove.getMovedPiece() == this) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

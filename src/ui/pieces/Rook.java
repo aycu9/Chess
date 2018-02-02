@@ -29,10 +29,12 @@ public class Rook extends ChessPiece {
         moves = new ArrayList<>();
         Location currentLocation = chessBoard.getPiecePosition(this);
 
+
         moveCheck(currentLocation, chessBoard, moves, 0, 1);
         moveCheck(currentLocation, chessBoard, moves, 0, -1);
         moveCheck(currentLocation, chessBoard, moves, 1, 0);
         moveCheck(currentLocation, chessBoard, moves, -1, 0);
+
 
         return moves;
     }

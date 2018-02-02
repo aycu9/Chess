@@ -1,7 +1,6 @@
 package ui.pieces;
 
 import game.Location;
-import game.Move;
 import game.Team;
 import javafx.scene.paint.Color;
 import ui.ChessBoard;
@@ -33,20 +32,14 @@ public class Pawn extends ChessPiece {
         int currentColumn = currentLocation.getColumn();
         int currentRow = currentLocation.getRow();
         int direction = chessBoard.getForwardDirection(this.getTeam());
-        boolean isPieceMoved = false;
+        boolean isPawnMoved = this.hasPieceMoved(chessBoard);
 
-        for (Move pastMove : chessBoard.getCurrentState().pastMoves) {
-            if (pastMove.getMovedPiece() == this) {
-                isPieceMoved = true;
-                break;
-            }
-        }
 
         GridSquare squareInFront1 = chessBoard.getGridSquare(currentColumn, currentRow + direction);
         if(squareInFront1 != null && !squareInFront1.hasChessPiece()) {
             moves.add(squareInFront1);
             GridSquare squareInFront2 = chessBoard.getGridSquare(currentColumn, currentRow + direction * 2);
-            if (squareInFront2 != null && !isPieceMoved && !squareInFront2.hasChessPiece()) {
+            if (squareInFront2 != null && !isPawnMoved && !squareInFront2.hasChessPiece()) {
                 moves.add(squareInFront2);
             }
         }

@@ -1,7 +1,6 @@
 package ui.pieces;
 
 import game.Location;
-import game.Move;
 import game.Team;
 import javafx.scene.paint.Color;
 import ui.ChessBoard;
@@ -50,14 +49,5 @@ public class Knight extends ChessPiece {
             legalMovesAdder(possibleMoves[i], moves);
         }
         return moves;
-    }
-
-
-    private void legalMovesAdder(GridSquare gridSquare, List<GridSquare> moves) {
-        if (gridSquare != null && !gridSquare.hasChessPiece()) {
-            moves.add(gridSquare);
-        } else if (gridSquare != null && gridSquare.hasChessPiece() && !gridSquare.getChessPiece().getTeam().isSameTeam(this.getTeam())) {
-            moves.add(gridSquare);
-        }
     }
 }

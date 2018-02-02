@@ -11,7 +11,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.awt.*;
+//import java.awt.*;
 
 public class Main extends Application {
 
@@ -44,9 +44,6 @@ public class Main extends Application {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
         game.startGame(gc);
-
-//        gc.setFill(Color.BLACK);
-//        gc.rect(10, 10, 100, 200);
 
     }
 }

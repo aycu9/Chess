@@ -5,9 +5,7 @@ import game.Location;
 import game.Team;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import ui.pieces.Knight;
-import ui.pieces.Pawn;
-import ui.pieces.Rook;
+import ui.pieces.*;
 
 import java.util.List;
 
@@ -67,10 +65,9 @@ public class ChessBoard implements Drawable, Clickable {
     }
 
     public GridSquare getGridSquare(int column, int row) {
-        if(column >= GRID_SIZE || column < 0 || row >= GRID_SIZE || row < 0) {
+        if (column >= GRID_SIZE || column < 0 || row >= GRID_SIZE || row < 0) {
             return null;
-        }
-        else {
+        } else {
             return boardGrid[column][row];
         }
     }
@@ -114,10 +111,21 @@ public class ChessBoard implements Drawable, Clickable {
         boardGrid[6][0].setChessPiece(new Knight(team2.getTeamColor(), team2, boardSize / GRID_SIZE));
         boardGrid[1][0].setChessPiece(new Knight(team2.getTeamColor(), team2, boardSize / GRID_SIZE));
         //create rooks
-        boardGrid[0][0].setChessPiece(new Rook(team2.getTeamColor(), team2, boardSize / GRID_SIZE));
-        boardGrid[7][0].setChessPiece(new Rook(team2.getTeamColor(), team2, boardSize / GRID_SIZE));
         boardGrid[0][7].setChessPiece(new Rook(team1.getTeamColor(), team1, boardSize / GRID_SIZE));
         boardGrid[7][7].setChessPiece(new Rook(team1.getTeamColor(), team1, boardSize / GRID_SIZE));
+        boardGrid[0][0].setChessPiece(new Rook(team2.getTeamColor(), team2, boardSize / GRID_SIZE));
+        boardGrid[7][0].setChessPiece(new Rook(team2.getTeamColor(), team2, boardSize / GRID_SIZE));
+        //create kings
+        boardGrid[4][7].setChessPiece(new King(team1.getTeamColor(), team1, boardSize / GRID_SIZE));
+        boardGrid[4][0].setChessPiece(new King(team2.getTeamColor(), team2, boardSize / GRID_SIZE));
+        //create bishops
+        boardGrid[2][7].setChessPiece(new Bishop(team1.getTeamColor(), team1, boardSize / GRID_SIZE));
+        boardGrid[5][7].setChessPiece(new Bishop(team1.getTeamColor(), team1, boardSize / GRID_SIZE));
+        boardGrid[2][0].setChessPiece(new Bishop(team2.getTeamColor(), team2, boardSize / GRID_SIZE));
+        boardGrid[5][0].setChessPiece(new Bishop(team2.getTeamColor(), team2, boardSize / GRID_SIZE));
+        //create queens
+        boardGrid[3][7].setChessPiece(new Queen(team1.getTeamColor(), team1, boardSize / GRID_SIZE));
+        boardGrid[3][0].setChessPiece(new Queen(team2.getTeamColor(), team2, boardSize / GRID_SIZE));
     }
 
     @Override
@@ -160,6 +168,27 @@ public class ChessBoard implements Drawable, Clickable {
                 boardGrid[x][y].setGridSelectedForLegalMoves(false);
             }
         }
+    }
+
+    public boolean isSquareThreatened(GridSquare gridSquare) {
+
+        for (int x = 0; x < GRID_SIZE; x++) {
+            for (int y = 0; y < GRID_SIZE; y++) {
+                if (gridSquare.hasChessPiece() && getGridSquare(x, y).hasChessPiece()) {
+                    if (getGridSquare(x, y).getChessPiece().getTeam() != gridSquare.getChessPiece().getTeam()) { //if they are not same team
+                        if (getGridSquare(x, y).getChessPiece().getLegalMoves(this).contains(gridSquare)) {//if threatened
+                            return true;
+                        }
+                    }
+                }
+                else if(getGridSquare(x, y).hasChessPiece()){
+                    if (getGridSquare(x, y).getChessPiece().getLegalMoves(this).contains(gridSquare)){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
 
