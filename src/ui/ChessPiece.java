@@ -11,9 +11,7 @@ import javafx.scene.text.TextAlignment;
 
 import java.util.List;
 
-/**
- * Created by Libra on 2017-10-14.
- */
+
 public abstract class ChessPiece implements Drawable {
     private final Color pieceColor;
     private final Color outlineColor;
@@ -59,6 +57,8 @@ public abstract class ChessPiece implements Drawable {
     }
 
     public abstract List<GridSquare> getLegalMoves (ChessBoard chessBoard);
+
+    public abstract List<GridSquare> getThreateningSquares (ChessBoard chessBoard);
 
     protected void legalMovesAdder(GridSquare gridSquare, List<GridSquare> moves) {
         if (gridSquare != null && !gridSquare.hasChessPiece()) { //Not null and Not occupied by a chess piece

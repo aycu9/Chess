@@ -10,9 +10,7 @@ import ui.GridSquare;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Libra on 2017-10-28.
- */
+
 public class Pawn extends ChessPiece {
 
     public Pawn(Color pieceColor, Team team, int size) {
@@ -44,42 +42,36 @@ public class Pawn extends ChessPiece {
             }
         }
 
-        if (diagonalOccupationStatus(chessBoard).equals("Both")) {
-            moves.add(chessBoard.getGridSquare(currentColumn + 1, currentRow + direction));
-            moves.add(chessBoard.getGridSquare(currentColumn - 1, currentRow + direction));
-        } else if (diagonalOccupationStatus(chessBoard).equals("Left")) {
-            moves.add(chessBoard.getGridSquare(currentColumn - 1, currentRow + direction));
-        } else if (diagonalOccupationStatus(chessBoard).equals("Right")) {
-            moves.add(chessBoard.getGridSquare(currentColumn + 1, currentRow + direction));
+
+        for (GridSquare gridSquare : getThreateningSquares(chessBoard)) {
+            if(gridSquare.hasChessPiece()){
+                if (!gridSquare.getChessPiece().getTeam().isSameTeam(this.getTeam())){
+                    moves.add(gridSquare);
+                }
+            }
         }
+
         return moves;
     }
 
-
-    public boolean thereIsEnemyDiagonally(Location currentLocation, ChessBoard chessBoard, int diagonalColumn) {
-        int direction = chessBoard.getForwardDirection(this.getTeam());
-        int column = currentLocation.getColumn() + diagonalColumn;
-        int row = currentLocation.getRow() + direction;
-        GridSquare columnGridSquare = chessBoard.getGridSquare(column, row);
-        if (columnGridSquare != null) {
-            if (columnGridSquare.hasChessPiece() && !columnGridSquare.getChessPiece().getTeam().isSameTeam(this.getTeam())) {
-                return true;
-            }
-            return false;
-        }
-        return false;
-    }
-
-
-    public String diagonalOccupationStatus(ChessBoard chessBoard) {
+    @Override
+    public List<GridSquare> getThreateningSquares(ChessBoard chessBoard) {
+        List<GridSquare> squares;
+        squares = new ArrayList<>();
         Location currentLocation = chessBoard.getPiecePosition(this);
-        if (thereIsEnemyDiagonally(currentLocation, chessBoard, -1) && thereIsEnemyDiagonally(currentLocation, chessBoard, 1)) {
-            return "Both";
-        } else if (thereIsEnemyDiagonally(currentLocation, chessBoard, -1) && !thereIsEnemyDiagonally(currentLocation, chessBoard, 1)) {
-            return "Left";
-        } else if (!thereIsEnemyDiagonally(currentLocation, chessBoard, -1) && thereIsEnemyDiagonally(currentLocation, chessBoard, 1)) {
-            return "Right";
-        } else
-            return "None";
+        int currentColumn = currentLocation.getColumn();
+        int currentRow = currentLocation.getRow();
+        int direction = chessBoard.getForwardDirection(this.getTeam());
+
+        GridSquare leftThreat = chessBoard.getGridSquare(currentColumn - 1, currentRow + direction);
+        GridSquare rightThreat = chessBoard.getGridSquare(currentColumn + 1, currentRow + direction);
+        if(leftThreat != null) {
+            squares.add(leftThreat);
+        }
+        if(rightThreat != null){
+            squares.add(rightThreat);
+        }
+
+        return squares;
     }
 }

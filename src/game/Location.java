@@ -1,8 +1,6 @@
 package game;
 
-/**
- * Created by Libra on 2017-12-09.
- */
+
 public class Location {
     private final int column;
     private final int row;

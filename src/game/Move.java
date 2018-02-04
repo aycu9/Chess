@@ -3,9 +3,7 @@ package game;
 import ui.ChessPiece;
 import ui.GridSquare;
 
-/**
- * Created by Libra on 2017-11-18.
- */
+
 public class Move {
     private final GridSquare startingSquare;
     private final GridSquare destinationSquare;

@@ -2,9 +2,7 @@ package game;
 
 import javafx.scene.paint.Color;
 
-/**
- * Created by Libra on 2017-10-14.
- */
+
 public class Team {
     private final Color teamColor;
 

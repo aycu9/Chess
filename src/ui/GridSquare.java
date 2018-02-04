@@ -3,9 +3,6 @@ package ui;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-/**
- * Created by Libra on 2017-10-14.
- */
 public class GridSquare implements Drawable, Clickable {
     private final Color background;
     private ChessPiece chessPiece;

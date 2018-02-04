@@ -10,9 +10,7 @@ import ui.pieces.*;
 import java.util.List;
 
 
-/**
- * Created by Libra on 2017-09-30.
- */
+
 public class ChessBoard implements Drawable, Clickable {
     private final Color background = Color.FLORALWHITE;
     private final GridSquare[][] boardGrid;
@@ -176,13 +174,13 @@ public class ChessBoard implements Drawable, Clickable {
             for (int y = 0; y < GRID_SIZE; y++) {
                 if (gridSquare.hasChessPiece() && getGridSquare(x, y).hasChessPiece()) {
                     if (getGridSquare(x, y).getChessPiece().getTeam() != gridSquare.getChessPiece().getTeam()) { //if they are not same team
-                        if (getGridSquare(x, y).getChessPiece().getLegalMoves(this).contains(gridSquare)) {//if threatened
+                        if (getGridSquare(x, y).getChessPiece().getThreateningSquares(this).contains(gridSquare)) {//if threatened
                             return true;
                         }
                     }
                 }
                 else if(getGridSquare(x, y).hasChessPiece()){
-                    if (getGridSquare(x, y).getChessPiece().getLegalMoves(this).contains(gridSquare)){
+                    if (getGridSquare(x, y).getChessPiece().getThreateningSquares(this).contains(gridSquare)){
                         return true;
                     }
                 }

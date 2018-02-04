@@ -10,9 +10,7 @@ import ui.GridSquare;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Libra on 2018-01-13.
- */
+
 public class Rook extends ChessPiece {
     public Rook(Color pieceColor, Team team, int size) {
         super(pieceColor, team, size);
@@ -27,26 +25,36 @@ public class Rook extends ChessPiece {
     public List<GridSquare> getLegalMoves(ChessBoard chessBoard) {
         List<GridSquare> moves;
         moves = new ArrayList<>();
-        Location currentLocation = chessBoard.getPiecePosition(this);
 
-
-        moveCheck(currentLocation, chessBoard, moves, 0, 1);
-        moveCheck(currentLocation, chessBoard, moves, 0, -1);
-        moveCheck(currentLocation, chessBoard, moves, 1, 0);
-        moveCheck(currentLocation, chessBoard, moves, -1, 0);
-
+        moves.addAll(getThreateningSquares(chessBoard));
 
         return moves;
     }
 
+    @Override
+    public List<GridSquare> getThreateningSquares(ChessBoard chessBoard) {
+        List<GridSquare> squares;
+        squares = new ArrayList<>();
+
+        Location currentLocation = chessBoard.getPiecePosition(this);
+
+        moveCheck(currentLocation, chessBoard, squares, 0, 1);
+        moveCheck(currentLocation, chessBoard, squares, 0, -1);
+        moveCheck(currentLocation, chessBoard, squares, 1, 0);
+        moveCheck(currentLocation, chessBoard, squares, -1, 0);
+
+        return squares;
+    }
+
+
     private void moveCheck(Location currentLocation, ChessBoard chessBoard, List<GridSquare> moves, int columnChange, int rowChange) {
-        int column = currentLocation.getColumn();
-        int row = currentLocation.getRow();
+        int currentColumn = currentLocation.getColumn();
+        int currentRow = currentLocation.getRow();
 
         while (true) {
-            row = row + rowChange;
-            column = column + columnChange;
-            GridSquare current = chessBoard.getGridSquare(column, row);
+            currentRow = currentRow + rowChange;
+            currentColumn = currentColumn + columnChange;
+            GridSquare current = chessBoard.getGridSquare(currentColumn, currentRow);
             if (current != null && !current.hasChessPiece()) {
                 moves.add(current);
             } else if (current != null && current.hasChessPiece() && !current.getChessPiece().getTeam().isSameTeam(this.getTeam())) {

@@ -8,9 +8,7 @@ import ui.GridSquare;
 
 import java.util.List;
 
-/**
- * Created by Libra on 2017-09-30.
- */
+
 public class ChessGame implements Clickable {
     private ChessBoard board;
     private GraphicsContext gc;
