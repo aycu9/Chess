@@ -1,7 +1,5 @@
 package game;
-
 import ui.GridSquare;
-
 import java.util.ArrayList;
 import java.util.List;
 

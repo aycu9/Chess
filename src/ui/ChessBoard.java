@@ -168,20 +168,15 @@ public class ChessBoard implements Drawable, Clickable {
         }
     }
 
-    public boolean isSquareThreatened(GridSquare gridSquare) {
+    public boolean isSquareThreatenedByEnemy(GridSquare gridSquare, Team team) {
 
         for (int x = 0; x < GRID_SIZE; x++) {
             for (int y = 0; y < GRID_SIZE; y++) {
-                if (gridSquare.hasChessPiece() && getGridSquare(x, y).hasChessPiece()) {
-                    if (getGridSquare(x, y).getChessPiece().getTeam() != gridSquare.getChessPiece().getTeam()) { //if they are not same team
+                if (getGridSquare(x, y).hasChessPiece()) {
+                    if (!getGridSquare(x, y).getChessPiece().getTeam().isSameTeam(team)) { //if not same team
                         if (getGridSquare(x, y).getChessPiece().getThreateningSquares(this).contains(gridSquare)) {//if threatened
                             return true;
                         }
-                    }
-                }
-                else if(getGridSquare(x, y).hasChessPiece()){
-                    if (getGridSquare(x, y).getChessPiece().getThreateningSquares(this).contains(gridSquare)){
-                        return true;
                     }
                 }
             }

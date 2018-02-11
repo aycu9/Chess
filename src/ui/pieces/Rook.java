@@ -38,31 +38,11 @@ public class Rook extends ChessPiece {
 
         Location currentLocation = chessBoard.getPiecePosition(this);
 
-        moveCheck(currentLocation, chessBoard, squares, 0, 1);
-        moveCheck(currentLocation, chessBoard, squares, 0, -1);
-        moveCheck(currentLocation, chessBoard, squares, 1, 0);
-        moveCheck(currentLocation, chessBoard, squares, -1, 0);
+        linearMoveAdder(currentLocation, chessBoard, squares, 0, 1);
+        linearMoveAdder(currentLocation, chessBoard, squares, 0, -1);
+        linearMoveAdder(currentLocation, chessBoard, squares, 1, 0);
+        linearMoveAdder(currentLocation, chessBoard, squares, -1, 0);
 
         return squares;
-    }
-
-
-    private void moveCheck(Location currentLocation, ChessBoard chessBoard, List<GridSquare> moves, int columnChange, int rowChange) {
-        int currentColumn = currentLocation.getColumn();
-        int currentRow = currentLocation.getRow();
-
-        while (true) {
-            currentRow = currentRow + rowChange;
-            currentColumn = currentColumn + columnChange;
-            GridSquare current = chessBoard.getGridSquare(currentColumn, currentRow);
-            if (current != null && !current.hasChessPiece()) {
-                moves.add(current);
-            } else if (current != null && current.hasChessPiece() && !current.getChessPiece().getTeam().isSameTeam(this.getTeam())) {
-                moves.add(current);
-                break;
-            } else {
-                break;
-            }
-        }
     }
 }

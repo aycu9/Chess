@@ -1,5 +1,6 @@
 package ui;
 
+import game.Location;
 import game.Move;
 import game.Team;
 import javafx.geometry.VPos;
@@ -77,4 +78,29 @@ public abstract class ChessPiece implements Drawable {
         }
         return false;
     }
+
+    protected void linearMoveAdder (Location currentLocation, ChessBoard chessBoard, List<GridSquare> moves, int columnChange, int rowChange){
+        int column = currentLocation.getColumn();
+        int row = currentLocation.getRow();
+
+        while (true) {
+            row = row + rowChange;
+            column = column + columnChange;
+            GridSquare current = chessBoard.getGridSquare(column, row);
+            if (current != null && !current.hasChessPiece()) { // does not have a piece on it
+                moves.add(current);
+            } else if (current != null && current.hasChessPiece() && !current.getChessPiece().getTeam().isSameTeam(this.getTeam())) {//Has piece but not same team
+                moves.add(current);
+                break;
+            } else {
+                break;
+            }
+        }
+    }
 }
+
+
+
+
+
+

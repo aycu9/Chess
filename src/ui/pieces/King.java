@@ -34,7 +34,7 @@ public class King extends ChessPiece {
 
 
         if (!this.hasPieceMoved(chessBoard)) { //if king has not moved
-            if (!chessBoard.isSquareThreatened(chessBoard.getGridSquare(currentColumn, currentRow))) { //if king is not threatened
+            if (!chessBoard.isSquareThreatenedByEnemy(chessBoard.getGridSquare(currentColumn, currentRow), this.getTeam())) { //if king is not threatened
                 this.addCastlingMoveIfLegal(0, chessBoard, moves);
                 this.addCastlingMoveIfLegal(7, chessBoard, moves);
             }
@@ -80,18 +80,18 @@ public class King extends ChessPiece {
         if (rookPiece instanceof Rook) {  //returns boolean after comparing (if checked piece is a Rook)
             if (!rookPiece.hasPieceMoved(chessBoard)) {//if Rook hasn't moved
 
-                boolean isOccupied = false;
+                boolean isLegal = true;
                 for (GridSquare gridSquare : spaceBetween) {
-                    if (chessBoard.isSquareThreatened(gridSquare)) {//if space in between not threatened
-                        isOccupied = true;
+                    if (chessBoard.isSquareThreatenedByEnemy(gridSquare, this.getTeam())) {//if grid square is threatened
+                        isLegal = false;
                         break;
                     }
-                    if (gridSquare.hasChessPiece()) {
-                        isOccupied = true;
+                    if (gridSquare.hasChessPiece()) {//if grid square has chess piece
+                        isLegal = false;
                         break;
                     }
                 }
-                if(isOccupied == false){
+                if(isLegal){
                     legalMoves.add(chessBoard.getGridSquare(rookColumn, currentRow));
                 }
             }
