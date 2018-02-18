@@ -35,7 +35,7 @@ public class Knight extends ChessPiece {
     public List<GridSquare> getThreateningSquares(ChessBoard chessBoard) {
         List<GridSquare> squares;
         squares = new ArrayList<>();
-        Location currentLocation = chessBoard.getPiecePosition(this);
+        Location currentLocation = chessBoard.getPieceLocation(this);
         int currentColumn = currentLocation.getColumn();
         int currentRow = currentLocation.getRow();
 

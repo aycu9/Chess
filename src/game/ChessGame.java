@@ -3,8 +3,11 @@ package game;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import ui.ChessBoard;
+import ui.ChessPiece;
 import ui.Clickable;
 import ui.GridSquare;
+import ui.pieces.King;
+import ui.pieces.Rook;
 
 import java.util.List;
 
@@ -56,45 +59,46 @@ public class ChessGame implements Clickable {
     }
 
     private void updateGameState() {
-        if (board.getCurrentState().selectedSquare != null) {
+        if (board.getCurrentState().selectedSquare != null) { //if selected a square
             if (this.allowedToSelectSquare()) {
                 board.getCurrentState().selectedSquare.setGridSelected(true);
             } else {
                 board.getCurrentState().selectedSquare = null;
             }
             if (board.getCurrentState().destinationSquare != null) {
-                if (allowedToMoveHere()) {
+                if (isLegalMove()) {
                     Move recentMove = new Move(board.getCurrentState().selectedSquare, board.getCurrentState().destinationSquare);
-                    board.getCurrentState().destinationSquare.setChessPiece(board.getCurrentState().selectedSquare.getChessPiece());
-                    board.getCurrentState().selectedSquare.setChessPiece(null);
+                    board.getCurrentState().pastMoves.add(recentMove);
+                    if (!tryCastlingMove()) {// if did not castle, execute normal move
+                        board.getCurrentState().destinationSquare.setChessPiece(board.getCurrentState().selectedSquare.getChessPiece());
+                        board.getCurrentState().selectedSquare.setChessPiece(null);
+                    }
+                    //applies to both types of move
                     board.getCurrentState().selectedSquare.setGridSelected(false);
                     board.getCurrentState().selectedSquare = null;
                     board.getCurrentState().destinationSquare = null;
                     this.swapCurrentTeam();
-                    board.getCurrentState().pastMoves.add(recentMove);
                 } else {
                     board.getCurrentState().destinationSquare = null;
                 }
             }
-
         }
-
     }
 
     private boolean allowedToSelectSquare() {
-        if (!board.getCurrentState().selectedSquare.hasChessPiece()) { //if false
+        if (!board.getCurrentState().selectedSquare.hasChessPiece()) { //if no chess piece
             return false;
         }
         if (!board.getCurrentState().selectedSquare.getChessPiece().getTeam().isSameTeam(board.getCurrentState().currentTeam)) { //if not same team
             return false;
         }
-        if(board.getCurrentState().selectedSquare.getChessPiece().getLegalMoves(board).isEmpty()){ //if no legal moves
+        if (board.getCurrentState().selectedSquare.getChessPiece().getLegalMoves(board).isEmpty()) { //if no legal moves
             return false;
         }
         return true;
     }
 
-    private boolean allowedToMoveHere() {
+    private boolean isLegalMove() {
         List<GridSquare> legalMoves = board.getCurrentState().selectedSquare.getChessPiece().getLegalMoves(board);
         if (legalMoves.contains(board.getCurrentState().destinationSquare)) {
             return true;
@@ -110,4 +114,25 @@ public class ChessGame implements Clickable {
             board.getCurrentState().currentTeam = team1;
     }
 
+    private boolean tryCastlingMove() {
+        ChessPiece king = board.getCurrentState().selectedSquare.getChessPiece();
+        ChessPiece rook = board.getCurrentState().destinationSquare.getChessPiece();
+        if (king instanceof King && rook instanceof Rook && king.getTeam().isSameTeam(rook.getTeam())) {
+            Location rookLocation = board.getPieceLocation(rook);
+            int rookRow = rookLocation.getRow();
+            int rookColumn = rookLocation.getColumn();
+            if (rookColumn == 0) {
+                board.getGridSquare(2, rookRow).setChessPiece(king);
+                board.getGridSquare(3, rookRow).setChessPiece(rook);
+            }
+            if (rookColumn == 7) {
+                board.getGridSquare(6, rookRow).setChessPiece(king);
+                board.getGridSquare(5, rookRow).setChessPiece(rook);
+            }
+            board.getCurrentState().destinationSquare.setChessPiece(null);
+            board.getCurrentState().selectedSquare.setChessPiece(null);
+            return true;
+        }
+        return false;
+    }
 }

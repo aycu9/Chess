@@ -25,7 +25,7 @@ public class King extends ChessPiece {
     public List<GridSquare> getLegalMoves(ChessBoard chessBoard) {
         List<GridSquare> moves;
         moves = new ArrayList<>();
-        Location currentLocation = chessBoard.getPiecePosition(this);
+        Location currentLocation = chessBoard.getPieceLocation(this);
         int currentColumn = currentLocation.getColumn();
         int currentRow = currentLocation.getRow();
 
@@ -45,7 +45,7 @@ public class King extends ChessPiece {
 
     @Override
     public List<GridSquare> getThreateningSquares(ChessBoard chessBoard) {
-        Location currentLocation = chessBoard.getPiecePosition(this);
+        Location currentLocation = chessBoard.getPieceLocation(this);
         int currentColumn = currentLocation.getColumn();
         int currentRow = currentLocation.getRow();
 
@@ -60,7 +60,7 @@ public class King extends ChessPiece {
 
     private void addCastlingMoveIfLegal(int rookColumn, ChessBoard chessBoard, List<GridSquare> legalMoves) {
 
-        Location currentLocation = chessBoard.getPiecePosition(this);
+        Location currentLocation = chessBoard.getPieceLocation(this);
         int currentRow = currentLocation.getRow();
 
         List<GridSquare> spaceBetween = new ArrayList<GridSquare>();

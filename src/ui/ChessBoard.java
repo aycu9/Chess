@@ -70,7 +70,7 @@ public class ChessBoard implements Drawable, Clickable {
         }
     }
 
-    public Location getPiecePosition(ChessPiece chessPiece) {
+    public Location getPieceLocation(ChessPiece chessPiece) {
         for (int x = 0; x < GRID_SIZE; x++) {
             for (int y = 0; y < GRID_SIZE; y++) {
                 if (boardGrid[x][y].hasChessPiece() && boardGrid[x][y].getChessPiece() == chessPiece) {

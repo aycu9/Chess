@@ -36,7 +36,7 @@ public class Rook extends ChessPiece {
         List<GridSquare> squares;
         squares = new ArrayList<>();
 
-        Location currentLocation = chessBoard.getPiecePosition(this);
+        Location currentLocation = chessBoard.getPieceLocation(this);
 
         linearMoveAdder(currentLocation, chessBoard, squares, 0, 1);
         linearMoveAdder(currentLocation, chessBoard, squares, 0, -1);

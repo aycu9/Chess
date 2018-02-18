@@ -34,7 +34,7 @@ public class Bishop extends ChessPiece {
     @Override
     public List<GridSquare> getThreateningSquares(ChessBoard chessBoard) {
         List<GridSquare> squares = new ArrayList<>();
-        Location currentLocation = chessBoard.getPiecePosition(this);
+        Location currentLocation = chessBoard.getPieceLocation(this);
 
         linearMoveAdder(currentLocation, chessBoard, squares, 1, 1);
         linearMoveAdder(currentLocation, chessBoard, squares, 1, -1);

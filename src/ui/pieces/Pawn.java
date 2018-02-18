@@ -26,7 +26,7 @@ public class Pawn extends ChessPiece {
     public List<GridSquare> getLegalMoves(ChessBoard chessBoard) {
         List<GridSquare> moves;
         moves = new ArrayList<>();
-        Location currentLocation = chessBoard.getPiecePosition(this);
+        Location currentLocation = chessBoard.getPieceLocation(this);
         int currentColumn = currentLocation.getColumn();
         int currentRow = currentLocation.getRow();
         int direction = chessBoard.getForwardDirection(this.getTeam());
@@ -58,7 +58,7 @@ public class Pawn extends ChessPiece {
     public List<GridSquare> getThreateningSquares(ChessBoard chessBoard) {
         List<GridSquare> squares;
         squares = new ArrayList<>();
-        Location currentLocation = chessBoard.getPiecePosition(this);
+        Location currentLocation = chessBoard.getPieceLocation(this);
         int currentColumn = currentLocation.getColumn();
         int currentRow = currentLocation.getRow();
         int direction = chessBoard.getForwardDirection(this.getTeam());
