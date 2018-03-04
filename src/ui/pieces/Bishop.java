@@ -26,10 +26,17 @@ public class Bishop extends ChessPiece {
         List<GridSquare> moves;
         moves = new ArrayList<>();
 
-        moves.addAll(getThreateningSquares(chessBoard));
+        for (GridSquare move : getThreateningSquares(chessBoard)) {
+            Location moveLocation = chessBoard.getGridSquareLocation(move);
+            int moveColumn = moveLocation.getColumn();
+            int moveRow = moveLocation.getRow();
 
-            return moves;
+            if (!this.moveResultsInCheck(chessBoard, moveColumn, moveRow)) {
+                moves.add(move);
+            }
         }
+        return moves;
+    }
 
     @Override
     public List<GridSquare> getThreateningSquares(ChessBoard chessBoard) {

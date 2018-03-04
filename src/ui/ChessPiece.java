@@ -10,6 +10,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -97,6 +98,25 @@ public abstract class ChessPiece implements Drawable {
             }
         }
     }
+
+    protected boolean moveResultsInCheck (ChessBoard chessBoard, int destinationColumn, int destinationRow){
+        ChessBoard tempBoard = new ChessBoard(chessBoard);
+
+        Location originalLocation = tempBoard.getPieceLocation(this);
+        int originalColumn = originalLocation.getColumn();
+        int originalRow = originalLocation.getRow();
+        tempBoard.getGridSquare(originalColumn, originalRow).setChessPiece(null);
+        tempBoard.getGridSquare(destinationColumn, destinationRow).setChessPiece(this);
+
+        GridSquare kingSquare = tempBoard.getKingSquare(this.getTeam());
+        if(kingSquare != null){
+            if (tempBoard.isSquareThreatenedByEnemy(kingSquare, this.getTeam())){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
 
 

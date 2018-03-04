@@ -29,10 +29,17 @@ public class King extends ChessPiece {
         int currentColumn = currentLocation.getColumn();
         int currentRow = currentLocation.getRow();
 
+        for (GridSquare move : getThreateningSquares(chessBoard)) {
+            Location moveLocation = chessBoard.getGridSquareLocation(move);
+            int moveColumn = moveLocation.getColumn();
+            int moveRow = moveLocation.getRow();
 
-        moves.addAll(getThreateningSquares(chessBoard));
+            if (!this.moveResultsInCheck(chessBoard, moveColumn, moveRow)) {
+                moves.add(move);
+            }
+        }
 
-
+        //add castling moves
         if (!this.hasPieceMoved(chessBoard)) { //if king has not moved
             if (!chessBoard.isSquareThreatenedByEnemy(chessBoard.getGridSquare(currentColumn, currentRow), this.getTeam())) { //if king is not threatened
                 this.addCastlingMoveIfLegal(0, chessBoard, moves);
@@ -91,7 +98,7 @@ public class King extends ChessPiece {
                         break;
                     }
                 }
-                if(isLegal){
+                if (isLegal) {
                     legalMoves.add(chessBoard.getGridSquare(rookColumn, currentRow));
                 }
             }

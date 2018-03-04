@@ -10,7 +10,6 @@ import ui.pieces.*;
 import java.util.List;
 
 
-
 public class ChessBoard implements Drawable, Clickable {
     private final Color background = Color.FLORALWHITE;
     private final GridSquare[][] boardGrid;
@@ -29,6 +28,21 @@ public class ChessBoard implements Drawable, Clickable {
         this.createGridSquares();
         this.createChessPieces();
     }
+
+    public ChessBoard(ChessBoard chessBoard) {
+        this.currentState = chessBoard.currentState;// try duplicate
+        boardGrid = new GridSquare[GRID_SIZE][GRID_SIZE];
+        this.boardSize = chessBoard.boardSize;
+        this.team1 = chessBoard.team1;
+        this.team2 = chessBoard.team2;
+        this.createGridSquares();
+        for (int x = 0; x < GRID_SIZE; x++) {
+            for (int y = 0; y < GRID_SIZE; y++) {
+                this.getGridSquare(x, y).setChessPiece(chessBoard.getGridSquare(x, y).getChessPiece());
+            }
+        }
+    }
+
 
     public void draw(GraphicsContext gc) {
         gc.setFill(background);
@@ -81,6 +95,16 @@ public class ChessBoard implements Drawable, Clickable {
         return null; //Piece not found on board
     }
 
+    public Location getGridSquareLocation(GridSquare gridSquare) {
+        for (int x = 0; x < GRID_SIZE; x++) {
+            for (int y = 0; y < GRID_SIZE; y++) {
+                if(boardGrid[x][y].equals(gridSquare)){
+                    return new Location (x, y);
+                }
+            }
+        }
+        return null;
+    }
 
     private void createGridSquares() {
         Color a = Color.GOLDENROD;
@@ -183,5 +207,19 @@ public class ChessBoard implements Drawable, Clickable {
         }
         return false;
     }
+
+    public GridSquare getKingSquare(Team team) {
+        for (int x = 0; x < GRID_SIZE; x++) {
+            for (int y = 0; y < GRID_SIZE; y++) {
+                GridSquare gridSquare = this.getGridSquare(x, y);
+                ChessPiece chessPiece = gridSquare.getChessPiece();
+                if (chessPiece instanceof King && chessPiece.getTeam().isSameTeam(team)) {
+                    return gridSquare;
+                }
+            }
+        }
+        return null;
+    }
+
 }
 
