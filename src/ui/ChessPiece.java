@@ -28,6 +28,10 @@ public abstract class ChessPiece implements Drawable {
         this.size = size;
         this.font = Font.font(null, FontWeight.BOLD, size / 2);
     }
+    //clone
+    public ChessPiece(ChessPiece chessPiece){
+        this(chessPiece.pieceColor, chessPiece.team, chessPiece.size);
+    }
 
     @Override
     public void draw(GraphicsContext gc) {

@@ -98,8 +98,8 @@ public class ChessBoard implements Drawable, Clickable {
     public Location getGridSquareLocation(GridSquare gridSquare) {
         for (int x = 0; x < GRID_SIZE; x++) {
             for (int y = 0; y < GRID_SIZE; y++) {
-                if(boardGrid[x][y].equals(gridSquare)){
-                    return new Location (x, y);
+                if (boardGrid[x][y].equals(gridSquare)) {
+                    return new Location(x, y);
                 }
             }
         }
@@ -219,6 +219,35 @@ public class ChessBoard implements Drawable, Clickable {
             }
         }
         return null;
+    }
+
+    public boolean pieceReachedOppositeSide(GridSquare gridSquare) {
+        if (gridSquare != null && gridSquare.hasChessPiece()){
+            Location squareLocation = this.getGridSquareLocation(gridSquare);
+            int squareColumn = squareLocation.getColumn();
+            int squareRow = squareLocation.getRow();
+            Team squarePieceTeam = gridSquare.getChessPiece().getTeam();
+            if (this.getGridSquare(squareColumn, squareRow + getForwardDirection(squarePieceTeam)) == null){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean teamHasLegalMoves(Team team) {
+        for (int x = 0; x < GRID_SIZE; x++) {
+            for (int y = 0; y < GRID_SIZE; y++) {
+                ChessPiece piece = this.getGridSquare(x, y).getChessPiece();
+                if (piece != null) {
+                    if (piece.getTeam().isSameTeam(team)) {
+                        if (!piece.getLegalMoves(this).isEmpty()) { //if any piece HAS legal moves
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 }

@@ -16,6 +16,10 @@ public class King extends ChessPiece {
         super(pieceColor, team, size);
     }
 
+    public King(ChessPiece chessPiece) {
+        super(chessPiece);
+    }
+
     @Override
     public String getName() {
         return "K";

@@ -5,9 +5,11 @@ import javafx.scene.paint.Color;
 
 public class Team {
     private final Color teamColor;
+    private final String teamName;
 
-    public Team(Color teamColor) {
+    public Team(Color teamColor, String teamName) {
         this.teamColor = teamColor;
+        this.teamName = teamName;
     }
 
     public boolean isSameTeam (Team otherTeam){
@@ -16,5 +18,9 @@ public class Team {
 
     public Color getTeamColor() {
         return teamColor;
+    }
+
+    public String getTeamName() {
+        return teamName;
     }
 }

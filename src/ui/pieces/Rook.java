@@ -16,6 +16,10 @@ public class Rook extends ChessPiece {
         super(pieceColor, team, size);
     }
 
+    public Rook(ChessPiece chessPiece) {
+        super(chessPiece);
+    }
+
     @Override
     public String getName() {
         return "R";

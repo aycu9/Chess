@@ -16,6 +16,10 @@ public class Bishop extends ChessPiece {
         super(pieceColor, team, size);
     }
 
+    public Bishop(ChessPiece chessPiece) {
+        super(chessPiece);
+    }
+
     @Override
     public String getName() {
         return "B";

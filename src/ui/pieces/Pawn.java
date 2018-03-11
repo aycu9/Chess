@@ -17,6 +17,10 @@ public class Pawn extends ChessPiece {
         super(pieceColor, team, size);
     }
 
+    public Pawn(ChessPiece chessPiece) {
+        super(chessPiece);
+    }
+
     @Override
     public String getName() {
         return "P";
