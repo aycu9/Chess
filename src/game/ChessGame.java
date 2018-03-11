@@ -35,7 +35,6 @@ public class ChessGame implements Clickable {
         board = new ChessBoard(windowHeight, team1, team2);
         drawUiElements();
         board.getCurrentState().currentTeam = team1;
-
     }
 
     public void drawUiElements() {
@@ -78,13 +77,15 @@ public class ChessGame implements Clickable {
                         board.getCurrentState().selectedSquare.setChessPiece(null);
                     }
                     //applies to both types of move
-                    if (pawnReachedOpposteSide()) {
-                        promotionPopup();
-                    }
                     board.getCurrentState().selectedSquare.setGridSelected(false);
                     board.getCurrentState().selectedSquare = null;
+                    if (pawnReachedOpposteSide()) {
+                        drawUiElements();
+                        promotionPopup();
+                    }
                     board.getCurrentState().destinationSquare = null;
                     this.swapCurrentTeam();
+                    drawUiElements();
                     checkmate();
                 } else {
                     board.getCurrentState().destinationSquare = null;
@@ -150,12 +151,12 @@ public class ChessGame implements Clickable {
         if (!board.teamHasLegalMoves(currentTeam)) {    //if current team has no legal moves
             if (board.isSquareThreatenedByEnemy(kingSquare, currentTeam)) {   // if current team's king is threatened
                 if (currentTeam.isSameTeam(team1)) {
-                    System.out.println("Team Black has won!");
+                    gameoverPopup("Team Black has won!");
                 } else {
-                    System.out.println("Team White has won!");
+                    gameoverPopup("Team White has won!");
                 }
             } else {
-                System.out.println("It's a draw!");
+                gameoverPopup("It's a draw!");
             }
         }
     }
@@ -196,6 +197,17 @@ public class ChessGame implements Clickable {
         } else if (result.get() == buttonRook) {
             pawnSquare.setChessPiece(new Rook(pawnPiece));
         }
+    }
+
+    private void gameoverPopup(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Game Over!");
+        alert.setHeaderText(message);
+        alert.setContentText("Click OK to start a new game.");
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        startGame(gc);
     }
 
 }
