@@ -1,5 +1,6 @@
 package ui;
 
+import api.UserState;
 import game.BoardState;
 import game.Location;
 import game.Team;
@@ -222,12 +223,12 @@ public class ChessBoard implements Drawable, Clickable {
     }
 
     public boolean pieceReachedOppositeSide(GridSquare gridSquare) {
-        if (gridSquare != null && gridSquare.hasChessPiece()){
+        if (gridSquare != null && gridSquare.hasChessPiece()) {
             Location squareLocation = this.getGridSquareLocation(gridSquare);
             int squareColumn = squareLocation.getColumn();
             int squareRow = squareLocation.getRow();
             Team squarePieceTeam = gridSquare.getChessPiece().getTeam();
-            if (this.getGridSquare(squareColumn, squareRow + getForwardDirection(squarePieceTeam)) == null){
+            if (this.getGridSquare(squareColumn, squareRow + getForwardDirection(squarePieceTeam)) == null) {
                 return true;
             }
         }
@@ -250,5 +251,22 @@ public class ChessBoard implements Drawable, Clickable {
         return false;
     }
 
+    public void dispatchUserState(UserState userState) {
+        if (userState == null) {
+            return;
+        }
+
+        if (userState.selectedSquare != null) {
+            int userStateColumn = userState.selectedSquare.column;
+            int userStateRow = userState.selectedSquare.row;
+            currentState.selectedSquare = getGridSquare(userStateColumn, userStateRow);
+        }
+
+        if (userState.destinationSquare != null) {
+            int userStateColumn = userState.destinationSquare.column;
+            int userStateRow = userState.destinationSquare.row;
+            currentState.destinationSquare = getGridSquare(userStateColumn, userStateRow);
+        }
+    }
 }
 

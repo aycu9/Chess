@@ -1,5 +1,7 @@
 package game;
 
+import api.UserState;
+import com.google.gson.Gson;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
@@ -57,8 +59,16 @@ public class ChessGame implements Clickable {
                 board.click(x - boardOriginX, y - boardOriginY);
             }
         }
+    }
+
+    public void dispatchUserState(UserState userState) {
+        board.dispatchUserState(userState);
         updateGameState();
         drawUiElements();
+    }
+
+    public UserState createUserState() {
+        return new UserState(board);
     }
 
     private void updateGameState() {
@@ -92,6 +102,14 @@ public class ChessGame implements Clickable {
                 }
             }
         }
+    }
+
+    public Team getTeam1() {
+        return team1;
+    }
+
+    public Team getTeam2() {
+        return team2;
     }
 
     private boolean allowedToSelectSquare() {
@@ -208,6 +226,10 @@ public class ChessGame implements Clickable {
         Optional<ButtonType> result = alert.showAndWait();
 
         startGame(gc);
+    }
+
+    public BoardState getBoardState() {
+        return board.getCurrentState();
     }
 
 }
