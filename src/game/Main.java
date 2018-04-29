@@ -3,6 +3,7 @@ package game;
 import api.ChessAPI;
 import api.UserState;
 import game.player.LocalPlayer;
+import game.player.NetworkPlayer;
 import game.player.Player;
 import javafx.application.Application;
 import javafx.event.*;
@@ -46,15 +47,9 @@ public class Main extends Application {
         game.startGame(gc);
         Player player1 = new LocalPlayer(game, game.getTeam1(), scene);
         player1.start();
-        Player player2 = new LocalPlayer(game, game.getTeam2(), scene);
+        Player player2 = new NetworkPlayer(game, game.getTeam2());
         player2.start();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.0.157:5000/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        ChessAPI api = retrofit.create(ChessAPI.class);
 
     }
 

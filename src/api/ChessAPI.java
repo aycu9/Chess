@@ -2,6 +2,7 @@ package api;
 
 import game.BoardState;
 import game.Team;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -11,10 +12,12 @@ import retrofit2.http.POST;
  * Created by Libra on 2018-03-24.
  */
 public interface ChessAPI {
-    @POST("connect")
-    Call<Team> connectToHost(@Body ConnectionRequest request);
+    String CONNECT_PATH = "connect";
+    String USERSTATE_PATH = "sendUserState";
 
-    @POST("sendUserState")
-    Call sendUserState(@Body UserState state);
+    @POST(CONNECT_PATH)
+    Call<Void> connectToHost(@Body ConnectionRequest request);
 
+    @POST(USERSTATE_PATH)
+    Call<Void> sendUserState(@Body UserState state);
 }

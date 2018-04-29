@@ -13,6 +13,7 @@ import ui.Clickable;
 import ui.GridSquare;
 import ui.pieces.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,12 +25,14 @@ public class ChessGame implements Clickable {
     private final int windowHeight;
     private final Team team1;
     private final Team team2;
+    private final List<UserStateListener> listeners;
 
     public ChessGame(int windowWidth, int windowHeight) {
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
         team1 = new Team(Color.WHITE, "White");
         team2 = new Team(Color.BLACK, "Black");
+        listeners = new ArrayList<>();  //initially no listeners
     }
 
     public void startGame(GraphicsContext gc) {
@@ -61,10 +64,15 @@ public class ChessGame implements Clickable {
         }
     }
 
+    //Makes move for a Player, all listeners receive the move as a UserState
     public void dispatchUserState(UserState userState) {
+        Team team = getBoardState().currentTeam;
         board.dispatchUserState(userState);
         updateGameState();
         drawUiElements();
+        for (int i = 0; i < listeners.size(); i++) {
+            listeners.get(i).onReceiveUserState(userState,team);
+        }
     }
 
     public UserState createUserState() {
@@ -230,6 +238,14 @@ public class ChessGame implements Clickable {
 
     public BoardState getBoardState() {
         return board.getCurrentState();
+    }
+
+    public void addListener (UserStateListener listener){
+        listeners.add(listener);
+    }
+
+    public void removeListener (UserStateListener listener){
+        listeners.remove(listener);
     }
 
 }
