@@ -6,6 +6,7 @@ import game.player.LocalPlayer;
 import game.player.NetworkPlayer;
 import game.player.Player;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.*;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -101,4 +102,9 @@ public class Main extends Application {
         return null;
     }
 
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        System.exit(0);
+    }
 }
