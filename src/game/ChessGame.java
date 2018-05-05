@@ -143,11 +143,9 @@ public class ChessGame implements Clickable {
     }
 
     private void swapCurrentTeam() {
-        if (board.getCurrentState().currentTeam == team1) {
-            board.getCurrentState().currentTeam = team2;
-        } else
-            board.getCurrentState().currentTeam = team1;
+        board.getCurrentState().currentTeam = getOppositeTeam(board.getCurrentState().currentTeam);
     }
+
 
     private boolean tryCastlingMove() {
         ChessPiece king = board.getCurrentState().selectedSquare.getChessPiece();
@@ -246,6 +244,15 @@ public class ChessGame implements Clickable {
 
     public void removeListener (UserStateListener listener){
         listeners.remove(listener);
+    }
+
+    public Team getOppositeTeam (Team team){
+        if (team.isSameTeam(team1)){
+            return team2;
+        }
+        else{
+            return team1;
+        }
     }
 
 }

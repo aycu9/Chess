@@ -3,9 +3,7 @@ package api;
 import game.Location;
 import ui.ChessBoard;
 
-/**
- * Created by Libra on 2018-03-24.
- */
+
 public class UserState {
     public UserSelection selectedSquare;
     public UserSelection destinationSquare;

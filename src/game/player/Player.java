@@ -3,9 +3,6 @@ package game.player;
 import game.ChessGame;
 import game.Team;
 
-/**
- * Created by Libra on 2018-03-31.
- */
 public abstract class Player {
     private final ChessGame chessGame;
     private final Team team;

@@ -8,9 +8,6 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
-/**
- * Created by Libra on 2018-03-24.
- */
 public interface ChessAPI {
     String CONNECT_PATH = "connect";
     String USERSTATE_PATH = "sendUserState";

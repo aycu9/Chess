@@ -16,9 +16,7 @@ import java.net.UnknownHostException;
 import static api.ChessAPI.CONNECT_PATH;
 import static api.ChessAPI.USERSTATE_PATH;
 
-/**
- * Created by Libra on 2018-04-21.
- */
+
 public class ChessAPIServer {
     private final int port;
     private HttpServer server;

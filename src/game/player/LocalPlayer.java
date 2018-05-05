@@ -6,9 +6,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 
-/**
- * Created by Libra on 2018-03-31.
- */
+
 public class LocalPlayer extends Player {
     private final Scene scene;
 

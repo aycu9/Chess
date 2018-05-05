@@ -14,20 +14,19 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * Created by Libra on 2018-03-31.
- */
+
 public class NetworkPlayer extends Player implements UserStateListener, ChessAPIServer.Delegate {
     private ChessAPI api;
     private final ChessAPIServer server;
     private static final int PORT = 8000;
 
-
-    public NetworkPlayer(ChessGame chessGame, Team team, String hostUrl) {
+    //client that connects to a host
+    public NetworkPlayer(ChessGame chessGame, Team team, String hostIPAddress) {
         this(chessGame, team);
-        connectToNetworkPlayer(hostUrl);
+        connectToNetworkPlayer(hostIPAddress);
     }
 
+    //hosting
     public NetworkPlayer(ChessGame chessGame, Team team) {
         super(chessGame, team);
         server = new ChessAPIServer(PORT);
@@ -43,7 +42,7 @@ public class NetworkPlayer extends Player implements UserStateListener, ChessAPI
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //todo
+
     }
 
     @Override
