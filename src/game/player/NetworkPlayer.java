@@ -14,6 +14,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import java.net.UnknownHostException;
+
 
 public class NetworkPlayer extends Player implements UserStateListener, ChessAPIServer.Delegate {
     private ChessAPI api;
@@ -24,6 +26,11 @@ public class NetworkPlayer extends Player implements UserStateListener, ChessAPI
     public NetworkPlayer(ChessGame chessGame, Team team, String hostIPAddress) {
         this(chessGame, team);
         connectToNetworkPlayer(hostIPAddress);
+        try {
+            api.connectToHost(new ConnectionRequest(server.getIPAddress()));
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
     }
 
     //hosting
