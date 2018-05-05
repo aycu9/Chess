@@ -1,9 +1,6 @@
 package game.player;
 
-import api.ChessAPI;
-import api.ChessAPIServer;
-import api.ConnectionRequest;
-import api.UserState;
+import api.*;
 import com.sun.net.httpserver.HttpServer;
 import game.ChessGame;
 import game.Team;
@@ -27,7 +24,7 @@ public class NetworkPlayer extends Player implements UserStateListener, ChessAPI
         this(chessGame, team);
         connectToNetworkPlayer(hostIPAddress);
         try {
-            api.connectToHost(new ConnectionRequest(server.getIPAddress()));
+            api.connectToHost(new ConnectionRequest(server.getIPAddress())).enqueue(new EmptyCallback());
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -65,17 +62,7 @@ public class NetworkPlayer extends Player implements UserStateListener, ChessAPI
         if (team.isSameTeam(this.getTeam())) {
             return;
         }
-        api.sendUserState(userState).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable throwable) {
-                throwable.printStackTrace();
-            }
-        });
+        api.sendUserState(userState).enqueue(new EmptyCallback());
     }
 
     @Override
