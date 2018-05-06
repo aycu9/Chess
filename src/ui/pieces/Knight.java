@@ -12,6 +12,8 @@ import java.util.List;
 
 
 public class Knight extends ChessPiece {
+    public static final String NAME = "Kn";
+
     public Knight(Color pieceColor, Team team, int size) {
         super(pieceColor, team, size);
     }
@@ -22,7 +24,7 @@ public class Knight extends ChessPiece {
 
     @Override
     public String getName() {
-        return "Kn";
+        return NAME;
     }
 
     @Override

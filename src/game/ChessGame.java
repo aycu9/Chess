@@ -68,10 +68,10 @@ public class ChessGame implements Clickable {
     public void dispatchUserState(UserState userState) {
         Team team = getBoardState().currentTeam;
         board.dispatchUserState(userState);
-        updateGameState();
+        updateGameState(userState);
         drawUiElements();
         for (int i = 0; i < listeners.size(); i++) {
-            listeners.get(i).onReceiveUserState(userState,team);
+            listeners.get(i).onReceiveUserState(userState, team);
         }
     }
 
@@ -79,7 +79,7 @@ public class ChessGame implements Clickable {
         return new UserState(board);
     }
 
-    private void updateGameState() {
+    private void updateGameState(UserState userState) {
         if (board.getCurrentState().selectedSquare != null) { //if selected a square
             if (this.allowedToSelectSquare()) {
                 board.getCurrentState().selectedSquare.setGridSelected(true);
@@ -99,7 +99,7 @@ public class ChessGame implements Clickable {
                     board.getCurrentState().selectedSquare = null;
                     if (pawnReachedOpposteSide()) {
                         drawUiElements();
-                        promotionPopup();
+                        promotionPopup(userState);
                     }
                     board.getCurrentState().destinationSquare = null;
                     this.swapCurrentTeam();
@@ -193,7 +193,7 @@ public class ChessGame implements Clickable {
         return false;
     }
 
-    private void promotionPopup() {
+    private void promotionPopup(UserState userState) {
         GridSquare pawnSquare = board.getCurrentState().destinationSquare;
         ChessPiece pawnPiece = pawnSquare.getChessPiece();
 
@@ -210,16 +210,45 @@ public class ChessGame implements Clickable {
 
         alert.getButtonTypes().setAll(buttonQueen, buttonBishop, buttonKnight, buttonRook, buttonTypeCancel);
 
-        Optional<ButtonType> result = alert.showAndWait();
+        ButtonType resultType;
+        if (userState.promotionResult == null) {
+            Optional<ButtonType> result = alert.showAndWait();
+            resultType = result.get();
+        } else {
+            switch (userState.promotionResult) {
+                case Queen.NAME:
+                    resultType = buttonQueen;
+                    break;
+                case Bishop.NAME:
+                    resultType = buttonBishop;
+                    break;
+                case Knight.NAME:
+                    resultType = buttonKnight;
+                    break;
+                case Rook.NAME:
+                    resultType = buttonRook;
+                    break;
+                default:
+                    resultType = buttonTypeCancel;
+                    break;
+            }
+        }
 
-        if (result.get() == buttonQueen) {
+
+        if (resultType == buttonQueen) {
             pawnSquare.setChessPiece(new Queen(pawnPiece));
-        } else if (result.get() == buttonBishop) {
+            userState.promotionResult = Queen.NAME;
+        } else if (resultType == buttonBishop) {
             pawnSquare.setChessPiece(new Bishop(pawnPiece));
-        } else if (result.get() == buttonKnight) {
+            userState.promotionResult = Bishop.NAME;
+        } else if (resultType == buttonKnight) {
             pawnSquare.setChessPiece(new Knight(pawnPiece));
-        } else if (result.get() == buttonRook) {
+            userState.promotionResult = Knight.NAME;
+        } else if (resultType == buttonRook) {
             pawnSquare.setChessPiece(new Rook(pawnPiece));
+            userState.promotionResult = Rook.NAME;
+        } else {
+            userState.promotionResult = Pawn.NAME;
         }
     }
 
@@ -238,19 +267,18 @@ public class ChessGame implements Clickable {
         return board.getCurrentState();
     }
 
-    public void addListener (UserStateListener listener){
+    public void addListener(UserStateListener listener) {
         listeners.add(listener);
     }
 
-    public void removeListener (UserStateListener listener){
+    public void removeListener(UserStateListener listener) {
         listeners.remove(listener);
     }
 
-    public Team getOppositeTeam (Team team){
-        if (team.isSameTeam(team1)){
+    public Team getOppositeTeam(Team team) {
+        if (team.isSameTeam(team1)) {
             return team2;
-        }
-        else{
+        } else {
             return team1;
         }
     }

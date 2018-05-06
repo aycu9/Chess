@@ -12,6 +12,8 @@ import java.util.List;
 
 
 public class Bishop extends ChessPiece {
+    public static final String NAME = "B";
+
     public Bishop(Color pieceColor, Team team, int size) {
         super(pieceColor, team, size);
     }
@@ -22,7 +24,7 @@ public class Bishop extends ChessPiece {
 
     @Override
     public String getName() {
-        return "B";
+        return NAME;
     }
 
     @Override

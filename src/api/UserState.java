@@ -7,6 +7,7 @@ import ui.ChessBoard;
 public class UserState {
     public UserSelection selectedSquare;
     public UserSelection destinationSquare;
+    public String promotionResult;
 
     public UserState(ChessBoard board) {
         if(board.getCurrentState().selectedSquare != null){

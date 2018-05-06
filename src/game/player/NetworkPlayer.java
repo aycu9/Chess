@@ -5,6 +5,7 @@ import com.sun.net.httpserver.HttpServer;
 import game.ChessGame;
 import game.Team;
 import game.UserStateListener;
+import javafx.application.Platform;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -73,7 +74,7 @@ public class NetworkPlayer extends Player implements UserStateListener, ChessAPI
 
     @Override
     public void receiveUserStateFromNetwork(UserState state) {
-        getChessGame().dispatchUserState(state);
+        Platform.runLater(() -> getChessGame().dispatchUserState(state));
     }
 
     private void connectToNetworkPlayer(String ipAddress) {

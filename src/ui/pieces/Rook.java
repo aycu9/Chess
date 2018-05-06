@@ -12,6 +12,8 @@ import java.util.List;
 
 
 public class Rook extends ChessPiece {
+    public static final String NAME = "R";
+
     public Rook(Color pieceColor, Team team, int size) {
         super(pieceColor, team, size);
     }
@@ -22,7 +24,7 @@ public class Rook extends ChessPiece {
 
     @Override
     public String getName() {
-        return "R";
+        return NAME;
     }
 
     @Override

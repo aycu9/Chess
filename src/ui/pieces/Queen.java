@@ -12,6 +12,8 @@ import java.util.List;
 
 
 public class Queen extends ChessPiece {
+    public static final String NAME = "Q";
+
     public Queen(Color pieceColor, Team team, int size) {
         super(pieceColor, team, size);
     }
@@ -22,7 +24,7 @@ public class Queen extends ChessPiece {
 
     @Override
     public String getName() {
-        return "Q";
+        return NAME;
     }
 
     @Override

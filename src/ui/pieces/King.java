@@ -2,6 +2,7 @@ package ui.pieces;
 
 import game.Location;
 import game.Team;
+import game.player.NetworkPlayer;
 import javafx.scene.paint.Color;
 import ui.ChessBoard;
 import ui.ChessPiece;
@@ -12,6 +13,8 @@ import java.util.List;
 
 
 public class King extends ChessPiece {
+    public static final String NAME = "K";
+
     public King(Color pieceColor, Team team, int size) {
         super(pieceColor, team, size);
     }
@@ -22,7 +25,7 @@ public class King extends ChessPiece {
 
     @Override
     public String getName() {
-        return "K";
+        return NAME;
     }
 
     @Override

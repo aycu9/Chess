@@ -12,6 +12,7 @@ import java.util.List;
 
 
 public class Pawn extends ChessPiece {
+    public static final String NAME = "P";
 
     public Pawn(Color pieceColor, Team team, int size) {
         super(pieceColor, team, size);
@@ -23,7 +24,7 @@ public class Pawn extends ChessPiece {
 
     @Override
     public String getName() {
-        return "P";
+        return NAME;
     }
 
     @Override
