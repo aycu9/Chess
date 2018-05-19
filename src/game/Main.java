@@ -26,6 +26,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.util.Optional;
 
+import static game.Main.GameType.LOCAL_GAME;
+import static game.Main.GameType.ONLINE_GAME;
+
 
 public class Main extends Application {
 
@@ -51,21 +54,44 @@ public class Main extends Application {
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         game.startGame(gc);
-        Team playerChosenTeam = askUserToPickTeam();;
-        Player player1 = new LocalPlayer(game, playerChosenTeam, scene);
-        player1.start();
-        Player player2;
-        String address = askUserForHostIPAddress();
-        if(address == null){
-            player2 = new NetworkPlayer(game, game.getOppositeTeam(playerChosenTeam));
+
+        if (askUserToChooseGameType() == ONLINE_GAME) {
+            Team playerChosenTeam = askUserToPickTeam();
+            Player player1 = new LocalPlayer(game, playerChosenTeam, scene);
+            player1.start();
+            Player player2;
+            String address = askUserForHostIPAddress();
+            if (address == null) {
+                player2 = new NetworkPlayer(game, game.getOppositeTeam(playerChosenTeam));
+            } else {
+                player2 = new NetworkPlayer(game, game.getOppositeTeam(playerChosenTeam), address);
+            }
+            player2.start();
+        } else {
+            Player player1 = new LocalPlayer(game, game.getTeam1(), scene);
+            player1.start();
+            Player player2 = new LocalPlayer(game, game.getTeam2(), scene);
+            player2.start();
         }
-        else{
-            player2 = new NetworkPlayer(game, game.getOppositeTeam(playerChosenTeam), address);
-        }
-        player2.start();
     }
 
-    public Team askUserToPickTeam (){
+    public GameType askUserToChooseGameType() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Online or Local");
+        alert.setHeaderText("Please choose whether you will play online or locally:");
+        ButtonType buttonLocal = new ButtonType("Local");
+        ButtonType buttonOnline = new ButtonType("Online");
+        alert.getButtonTypes().setAll(buttonLocal, buttonOnline);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == buttonLocal) {
+            return LOCAL_GAME;
+        } else if (result.get() == buttonOnline) {
+            return ONLINE_GAME;
+        }
+        return null;
+    }
+
+    public Team askUserToPickTeam() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Pick Team");
         alert.setHeaderText("Please pick the team you want to play as:");
@@ -73,15 +99,15 @@ public class Main extends Application {
         ButtonType buttonTeam2 = new ButtonType(game.getTeam2().getTeamName());
         alert.getButtonTypes().setAll(buttonTeam1, buttonTeam2);
         Optional<ButtonType> result = alert.showAndWait();
-        if(result.get() == buttonTeam1){
+        if (result.get() == buttonTeam1) {
             return game.getTeam1();
-        }else if(result.get() == buttonTeam2){
+        } else if (result.get() == buttonTeam2) {
             return game.getTeam2();
         }
         return null;
     }
 
-    public String askUserForHostIPAddress (){
+    public String askUserForHostIPAddress() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Host or client?");
         alert.setHeaderText("Do you wish to be the host or the client? ");
@@ -89,14 +115,14 @@ public class Main extends Application {
         ButtonType buttonTeam2 = new ButtonType("Host");
         alert.getButtonTypes().setAll(buttonTeam1, buttonTeam2);
         Optional<ButtonType> result = alert.showAndWait();
-        if(result.get() == buttonTeam1){
+        if (result.get() == buttonTeam1) {
             TextInputDialog dialog = new TextInputDialog("");
             dialog.setTitle("Enter Host Address");
             dialog.setHeaderText("Enter the IP Address of the host that you are connecting to:");
             dialog.setContentText("IP Address: ");
             Optional<String> address = dialog.showAndWait();
             return address.get();
-        }else if(result.get() == buttonTeam2){
+        } else if (result.get() == buttonTeam2) {
             return null;
         }
         return null;
@@ -107,4 +133,9 @@ public class Main extends Application {
         super.stop();
         System.exit(0);
     }
+
+    enum GameType {
+        LOCAL_GAME, ONLINE_GAME
+    }
+
 }

@@ -37,7 +37,7 @@ public abstract class ChessPiece implements Drawable {
     public void draw(GraphicsContext gc) {
         gc.setFill(pieceColor);
         gc.setStroke(outlineColor);
-        gc.setLineWidth(3);
+        gc.setLineWidth(1.5);
         gc.setFont(font);
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
