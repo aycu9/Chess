@@ -15,46 +15,26 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import java.net.UnknownHostException;
 
 
-public class NetworkPlayer extends Player implements UserStateListener, ChessAPIServer.Delegate {
+public class NetworkPlayer extends Player implements UserStateListener {
     private ChessAPI api;
-    private final ChessAPIServer server;
-    private static final int PORT = 8000;
 
-    //client that connects to a host
-    public NetworkPlayer(ChessGame chessGame, Team team, String hostIPAddress) {
-        this(chessGame, team);
-        connectToNetworkPlayer(hostIPAddress);
-        try {
-            api.connectToHost(new ConnectionRequest(server.getIPAddress())).enqueue(new EmptyCallback());
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-    }
-
-    //hosting
-    public NetworkPlayer(ChessGame chessGame, Team team) {
+    public NetworkPlayer(ChessGame chessGame, Team team, String apiBaseURL) {
         super(chessGame, team);
-        server = new ChessAPIServer(PORT);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(apiBaseURL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        api = retrofit.create(ChessAPI.class);
     }
 
     @Override
     public void start() {
         getChessGame().addListener(this);
-        server.setDelegate(this);
-        try {
-            server.start();
-            System.out.println("My IP Address = " + server.getIPAddress());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
     @Override
     public void stop() {
         getChessGame().removeListener(this);
-        server.stop();
-        server.setDelegate(null);
     }
 
     //receives UserState from LocalPlayer, sends UserState towards other player through api
@@ -63,25 +43,10 @@ public class NetworkPlayer extends Player implements UserStateListener, ChessAPI
         if (team.isSameTeam(this.getTeam())) {
             return;
         }
-        api.sendUserState(userState).enqueue(new EmptyCallback());
+//        api.sendUserState(userState).enqueue(new EmptyCallback());
     }
 
-    @Override
-    public void receiveConnectionRequest(ConnectionRequest request) {
-        connectToNetworkPlayer(request.ipAddress);
-        System.out.println("Other Player's IP Address = " + request.ipAddress);
-    }
-
-    @Override
     public void receiveUserStateFromNetwork(UserState state) {
         Platform.runLater(() -> getChessGame().dispatchUserState(state));
-    }
-
-    private void connectToNetworkPlayer(String ipAddress) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://" + ipAddress + ":" + PORT)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        api = retrofit.create(ChessAPI.class);
     }
 }

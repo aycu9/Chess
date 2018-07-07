@@ -2,6 +2,7 @@ package game;
 
 import api.ChessAPI;
 import api.UserState;
+import game.lobby.OnlineLobby;
 import game.player.LocalPlayer;
 import game.player.NetworkPlayer;
 import game.player.Player;
@@ -35,6 +36,7 @@ public class Main extends Application {
     private int windowWidth = 800;
     private int windowHeight = 640;
     private ChessGame game = new ChessGame(windowWidth, windowHeight);
+    private String apiBaseURL = "https://aqueous-crag-60434.herokuapp.com";
 
 
     public static void main(String[] args) {
@@ -56,17 +58,19 @@ public class Main extends Application {
         game.startGame(gc);
 
         if (askUserToChooseGameType() == ONLINE_GAME) {
-            Team playerChosenTeam = askUserToPickTeam();
-            Player player1 = new LocalPlayer(game, playerChosenTeam, scene);
-            player1.start();
-            Player player2;
-            String address = askUserForHostIPAddress();
-            if (address == null) {
-                player2 = new NetworkPlayer(game, game.getOppositeTeam(playerChosenTeam));
-            } else {
-                player2 = new NetworkPlayer(game, game.getOppositeTeam(playerChosenTeam), address);
-            }
-            player2.start();
+            OnlineLobby onlineLobby = new OnlineLobby(apiBaseURL);
+            onlineLobby.launchLobby();
+//            Team playerChosenTeam = askUserToPickTeam();
+//            Player player1 = new LocalPlayer(game, playerChosenTeam, scene);
+//            player1.start();
+//            Player player2;
+//            String address = askUserForHostIPAddress();
+//            if (address == null) {
+//                player2 = new NetworkPlayer(game, game.getOppositeTeam(playerChosenTeam));
+//            } else {
+//                player2 = new NetworkPlayer(game, game.getOppositeTeam(playerChosenTeam), address);
+//            }
+//            player2.start();
         } else {
             Player player1 = new LocalPlayer(game, game.getTeam1(), scene);
             player1.start();
@@ -128,6 +132,7 @@ public class Main extends Application {
         return null;
     }
 
+
     @Override
     public void stop() throws Exception {
         super.stop();
@@ -137,5 +142,6 @@ public class Main extends Application {
     enum GameType {
         LOCAL_GAME, ONLINE_GAME
     }
+
 
 }

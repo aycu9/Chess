@@ -9,12 +9,6 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface ChessAPI {
-    String CONNECT_PATH = "connect";
-    String USERSTATE_PATH = "sendUserState";
-
-    @POST(CONNECT_PATH)
-    Call<Void> connectToHost(@Body ConnectionRequest request);
-
-    @POST(USERSTATE_PATH)
-    Call<Void> sendUserState(@Body UserState state);
+    @POST("register")
+    Call<String> connectToHost(@Body NewUser newUser);
 }
