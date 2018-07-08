@@ -5,4 +5,8 @@ package api;
  */
 public class NewUser {
     public String name;
+
+    public NewUser(String name) {
+        this.name = name;
+    }
 }

@@ -10,5 +10,5 @@ import retrofit2.http.POST;
 
 public interface ChessAPI {
     @POST("register")
-    Call<String> connectToHost(@Body NewUser newUser);
+    Call<String> registerNewUser (@Body NewUser newUser);
 }
