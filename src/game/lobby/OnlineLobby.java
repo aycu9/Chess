@@ -1,9 +1,6 @@
 package game.lobby;
 
-import api.ChessAPI;
-import api.Host;
-import api.NewUser;
-import api.User;
+import api.*;
 import javafx.scene.control.TextInputDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,10 +26,24 @@ public class OnlineLobby{
         public void onResponse(Call<String> call, Response<String> response) {
             String uuid = response.body();
             System.out.println(uuid);
+            GetUserRequest getUserRequest = new GetUserRequest(uuid);
+            api.getUser(getUserRequest).enqueue(getUserCallback);
         }
 
         @Override
         public void onFailure(Call<String> call, Throwable throwable) {
+            throwable.printStackTrace();
+        }
+    };
+    private final Callback<User> getUserCallback = new Callback<User>() {
+        @Override
+        public void onResponse(Call<User> call, Response<User> response) {
+            user = response.body();
+            System.out.println(user);
+        }
+
+        @Override
+        public void onFailure(Call<User> call, Throwable throwable) {
             throwable.printStackTrace();
         }
     };

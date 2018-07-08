@@ -5,4 +5,8 @@ package api;
  */
 public class GetUserRequest {
     public String uuid;
+
+    public GetUserRequest (String uuid){
+        this.uuid = uuid;
+    }
 }
