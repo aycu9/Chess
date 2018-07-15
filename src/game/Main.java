@@ -59,7 +59,7 @@ public class Main extends Application {
 
         if (askUserToChooseGameType() == ONLINE_GAME) {
             OnlineLobby onlineLobby = new OnlineLobby(apiBaseURL);
-            onlineLobby.launchLobby();
+            onlineLobby.launch(primaryStage);
 //            Team playerChosenTeam = askUserToPickTeam();
 //            Player player1 = new LocalPlayer(game, playerChosenTeam, scene);
 //            player1.start();
