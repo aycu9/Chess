@@ -2,6 +2,7 @@ package game.lobby;
 
 import api.ChessAPI;
 import api.Host;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -27,10 +28,15 @@ public class HostList {
         public void onResponse(Call<List<Host>> call, Response<List<Host>> response) {
             hostList.clear();
             hostList.addAll(response.body());
-            data.clear();
-            for (int i = 0; i < hostList.size(); i++) {
-                data.add("Name: " + hostList.get(i).name + "          " + "Team: " + hostList.get(i).team.getName());
-            }
+            Platform.runLater(new Runnable() { //Running on UI Thread
+                @Override
+                public void run() {
+                    data.clear();
+                    for (int i = 0; i < hostList.size(); i++) {
+                        data.add("Name: " + hostList.get(i).name + "          " + "Team: " + hostList.get(i).team.getName());
+                    }
+                }
+            });
         }
 
         @Override

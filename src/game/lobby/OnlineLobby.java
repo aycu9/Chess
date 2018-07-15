@@ -4,9 +4,13 @@ import api.*;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -90,7 +94,21 @@ public class OnlineLobby{
         usernameLabel.setText("Nickname: " + newUser.name);
         usernameLabel.setPadding(new Insets(8));
         VBox root = new VBox();
-        root.getChildren().addAll(usernameLabel, hostList.getNode());
+        root.getChildren().addAll(usernameLabel, hostList.getNode(), createButton());
         stage.setScene(new Scene(root, windowWidth, windowHeight));
     }
+
+    private Node createButton (){
+
+        Button refreshButton = new Button("Refresh");
+        refreshButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                hostList.updateHostList();
+            }
+        });
+
+        FlowPane flowPane = new FlowPane(refreshButton);
+        return flowPane;
+    }
+
 }
