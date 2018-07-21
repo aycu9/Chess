@@ -29,7 +29,7 @@ import java.util.Optional;
 /**
  * Created by Libra on 2018-06-30.
  */
-public class OnlineLobby{
+public class OnlineLobby {
     private final Retrofit retrofit;
     private final ChessAPI api;
     private User user;
@@ -63,6 +63,17 @@ public class OnlineLobby{
             throwable.printStackTrace();
         }
     };
+    private final Callback<Void> hostCallback = new Callback<Void>() {
+        @Override
+        public void onResponse(Call<Void> call, Response<Void> response) {
+            hostList.updateHostList();
+        }
+
+        @Override
+        public void onFailure(Call<Void> call, Throwable throwable) {
+            throwable.printStackTrace();
+        }
+    };
 
 
     public OnlineLobby(String apiBaseURL) {
@@ -91,6 +102,7 @@ public class OnlineLobby{
     }
 
     private void createLobbyUI(Stage stage, NewUser newUser) {
+
         usernameLabel.setText("Nickname: " + newUser.name);
         usernameLabel.setPadding(new Insets(8));
         VBox root = new VBox();
@@ -98,17 +110,45 @@ public class OnlineLobby{
         stage.setScene(new Scene(root, windowWidth, windowHeight));
     }
 
-    private Node createButton (){
+    private Node createButton() {
 
         Button refreshButton = new Button("Refresh");
         refreshButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
+            @Override
+            public void handle(ActionEvent e) {
                 hostList.updateHostList();
             }
         });
-
-        FlowPane flowPane = new FlowPane(refreshButton);
+        Button hostButton = new Button("Host Game");
+        hostButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                Integer chosenTeam = askUserToPickTeam();
+                if (chosenTeam != null) {
+                    Call<Void> call = api.hostGame(new HostGameRequest(user.getUuid(), chosenTeam));
+                    call.enqueue(hostCallback);
+                }
+            }
+        });
+        FlowPane flowPane = new FlowPane(refreshButton, hostButton);
         return flowPane;
+    }
+
+    private Integer askUserToPickTeam() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Pick Team");
+        alert.setHeaderText("Please pick the team you want to play as:");
+        ButtonType buttonTeam1 = new ButtonType(new Team(1).getName());
+        ButtonType buttonTeam2 = new ButtonType(new Team(2).getName());
+        ButtonType buttonCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(buttonTeam1, buttonTeam2, buttonCancel);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == buttonTeam1) {
+            return 1;
+        } else if (result.get() == buttonTeam2) {
+            return 2;
+        }
+        return null;
     }
 
 }

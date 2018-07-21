@@ -6,4 +6,9 @@ package api;
 public class HostGameRequest {
     public String uuid;
     public Integer team;
+
+    public HostGameRequest (String uuid, Integer team){
+        this.uuid = uuid;
+        this.team = team;
+    }
 }

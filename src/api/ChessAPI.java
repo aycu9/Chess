@@ -2,7 +2,6 @@ package api;
 
 import game.BoardState;
 import game.Team;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -19,4 +18,7 @@ public interface ChessAPI {
 
     @GET("host_list")
     Call<List<Host>> getHostList ();
+
+    @POST("host")
+    Call<Void> hostGame (@Body HostGameRequest hostGameRequest);
 }
