@@ -21,4 +21,7 @@ public interface ChessAPI {
 
     @POST("host")
     Call<Void> hostGame (@Body HostGameRequest hostGameRequest);
+
+    @POST("start_game")
+    Call<Void> startGame (@Body StartGameRequest startGameRequest);
 }

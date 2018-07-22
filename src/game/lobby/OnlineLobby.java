@@ -63,10 +63,11 @@ public class OnlineLobby {
             throwable.printStackTrace();
         }
     };
-    private final Callback<Void> hostCallback = new Callback<Void>() {
+    private final Callback<Void> waitForGameToStartCallback = new Callback<Void>() {
         @Override
         public void onResponse(Call<Void> call, Response<Void> response) {
             hostList.updateHostList();
+            System.out.println("succeeded");
         }
 
         @Override
@@ -126,11 +127,25 @@ public class OnlineLobby {
                 Integer chosenTeam = askUserToPickTeam();
                 if (chosenTeam != null) {
                     Call<Void> call = api.hostGame(new HostGameRequest(user.getUuid(), chosenTeam));
-                    call.enqueue(hostCallback);
+                    call.enqueue(waitForGameToStartCallback);
                 }
             }
         });
-        FlowPane flowPane = new FlowPane(refreshButton, hostButton);
+        Button joinButton = new Button("Join");
+        joinButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                Host currentlySelectedHost = hostList.getCurrentlySelectedHost();
+                if(currentlySelectedHost != null) {
+                    Call<Void> call = api.startGame(new StartGameRequest(currentlySelectedHost.uuid, user.getUuid()));
+                    call.enqueue(waitForGameToStartCallback);
+                }
+                else{
+                    System.out.println("Please select a host first.");
+                }
+            }
+        });
+        FlowPane flowPane = new FlowPane(refreshButton, hostButton, joinButton);
         return flowPane;
     }
 
@@ -150,5 +165,7 @@ public class OnlineLobby {
         }
         return null;
     }
+
+
 
 }

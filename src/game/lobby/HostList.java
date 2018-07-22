@@ -61,4 +61,12 @@ public class HostList {
         api.getHostList().enqueue(getHostListCallback);
     }
 
+    public Host getCurrentlySelectedHost (){
+        int selectedIndex = listView.getSelectionModel().getSelectedIndex();
+        if(selectedIndex != -1) {
+            return hostList.get(selectedIndex);
+        }
+        return null;
+    }
+
 }

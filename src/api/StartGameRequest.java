@@ -6,4 +6,9 @@ package api;
 public class StartGameRequest {
     public String hostUuid;
     public String otherUuid;
+
+    public StartGameRequest (String hostUuid, String otherUuid){
+        this.hostUuid = hostUuid;
+        this.otherUuid = otherUuid;
+    }
 }
