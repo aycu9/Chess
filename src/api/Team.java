@@ -27,4 +27,8 @@ public class Team {
     public String getName() {
         return teamNumber == 1 ? "White" : "Black";
     }
+
+    public int getTeamNumber() {
+        return teamNumber;
+    }
 }

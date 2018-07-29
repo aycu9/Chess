@@ -16,7 +16,7 @@ import java.net.UnknownHostException;
 
 
 public class NetworkPlayer extends Player implements UserStateListener {
-    private ChessAPI api;
+    private final ChessAPI api;
 
     public NetworkPlayer(ChessGame chessGame, Team team, String apiBaseURL) {
         super(chessGame, team);

@@ -113,7 +113,6 @@ public class OnlineLobby {
     }
 
     private void createLobbyUI() {
-
         usernameLabel.setText("Nickname: " + user.getName());
         usernameLabel.setPadding(new Insets(8));
         VBox root = new VBox();

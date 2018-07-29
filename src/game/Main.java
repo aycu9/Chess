@@ -41,6 +41,8 @@ public class Main extends Application {
     private ChessGame game = new ChessGame(windowWidth, windowHeight);
     private String apiBaseURL = "https://aqueous-crag-60434.herokuapp.com";
     private final StartGameCallback startGameCallback = this::startOnlineGameAsUser;
+    private Scene scene;
+    private Stage primaryStage;
 
 
     public static void main(String[] args) {
@@ -49,11 +51,12 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        this.primaryStage = primaryStage;
         System.out.println("Application starts.");
         primaryStage.setTitle("Chess Game");
         Canvas canvas = new Canvas(windowWidth, windowHeight);
         Group root = new Group();
-        Scene scene = new Scene(root, windowWidth, windowHeight, Color.BEIGE);
+        scene = new Scene(root, windowWidth, windowHeight, Color.BEIGE);
         root.getChildren().add(canvas);
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -64,18 +67,6 @@ public class Main extends Application {
         if (askUserToChooseGameType() == ONLINE_GAME) {
             OnlineLobby onlineLobby = new OnlineLobby(apiBaseURL, startGameCallback);
             onlineLobby.launch(primaryStage);
-
-//            Player player1 = new LocalPlayer(game, playerChosenTeam, scene);
-//            player1.start();
-//            Player player2;
-//            String address = askUserForHostIPAddress();
-//            if (address == null) {
-//                player2 = new NetworkPlayer(game, game.getOppositeTeam(playerChosenTeam));
-//            } else {
-//                player2 = new NetworkPlayer(game, game.getOppositeTeam(playerChosenTeam), address);
-//            }
-//            player2.start();
-
         } else {
             Player player1 = new LocalPlayer(game, game.getTeam1(), scene);
             player1.start();
@@ -116,30 +107,15 @@ public class Main extends Application {
         return null;
     }
 
-    public String askUserForHostIPAddress() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Host or client?");
-        alert.setHeaderText("Do you wish to be the host or the client? ");
-        ButtonType buttonTeam1 = new ButtonType("Client");
-        ButtonType buttonTeam2 = new ButtonType("Host");
-        alert.getButtonTypes().setAll(buttonTeam1, buttonTeam2);
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == buttonTeam1) {
-            TextInputDialog dialog = new TextInputDialog("");
-            dialog.setTitle("Enter Host Address");
-            dialog.setHeaderText("Enter the IP Address of the host that you are connecting to:");
-            dialog.setContentText("IP Address: ");
-            Optional<String> address = dialog.showAndWait();
-            return address.get();
-        } else if (result.get() == buttonTeam2) {
-            return null;
-        }
-        return null;
-    }
-
-    private void startOnlineGameAsUser (User user){
+    private void startOnlineGameAsUser(User user) {
         System.out.println("starting");
-
+        Team playerChosenTeam = user.getTeam().getTeamNumber() == 1 ? game.getTeam1() : game.getTeam2();
+        Player player1 = new LocalPlayer(game, playerChosenTeam, scene);
+        player1.start();
+        Player player2;
+        player2 = new NetworkPlayer(game, game.getOppositeTeam(playerChosenTeam), apiBaseURL);
+        player2.start();
+        primaryStage.setScene(scene);
     }
 
     @Override
