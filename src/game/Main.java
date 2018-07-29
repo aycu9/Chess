@@ -1,8 +1,11 @@
 package game;
 
 import api.ChessAPI;
+import api.StartGameRequest;
+import api.User;
 import api.UserState;
 import game.lobby.OnlineLobby;
+import game.lobby.StartGameCallback;
 import game.player.LocalPlayer;
 import game.player.NetworkPlayer;
 import game.player.Player;
@@ -37,6 +40,7 @@ public class Main extends Application {
     private int windowHeight = 640;
     private ChessGame game = new ChessGame(windowWidth, windowHeight);
     private String apiBaseURL = "https://aqueous-crag-60434.herokuapp.com";
+    private final StartGameCallback startGameCallback = this::startOnlineGameAsUser;
 
 
     public static void main(String[] args) {
@@ -58,9 +62,9 @@ public class Main extends Application {
         game.startGame(gc);
 
         if (askUserToChooseGameType() == ONLINE_GAME) {
-            OnlineLobby onlineLobby = new OnlineLobby(apiBaseURL);
+            OnlineLobby onlineLobby = new OnlineLobby(apiBaseURL, startGameCallback);
             onlineLobby.launch(primaryStage);
-//            Team playerChosenTeam = askUserToPickTeam();
+
 //            Player player1 = new LocalPlayer(game, playerChosenTeam, scene);
 //            player1.start();
 //            Player player2;
@@ -71,6 +75,7 @@ public class Main extends Application {
 //                player2 = new NetworkPlayer(game, game.getOppositeTeam(playerChosenTeam), address);
 //            }
 //            player2.start();
+
         } else {
             Player player1 = new LocalPlayer(game, game.getTeam1(), scene);
             player1.start();
@@ -132,6 +137,10 @@ public class Main extends Application {
         return null;
     }
 
+    private void startOnlineGameAsUser (User user){
+        System.out.println("starting");
+
+    }
 
     @Override
     public void stop() throws Exception {

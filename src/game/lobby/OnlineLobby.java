@@ -2,6 +2,7 @@ package game.lobby;
 
 import api.*;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -31,12 +32,14 @@ import java.util.Optional;
  */
 public class OnlineLobby {
     private final Retrofit retrofit;
+    private final StartGameCallback startGameCallback;
     private final ChessAPI api;
     private User user;
     private final int windowWidth = 600;
     private final int windowHeight = 300;
     private final Label usernameLabel = new Label();
     private final HostList hostList;
+    private GameStartChecker gameStartChecker;
     private final Callback<String> registerCallback = new Callback<String>() {
         @Override
         public void onResponse(Call<String> call, Response<String> response) {
@@ -56,6 +59,8 @@ public class OnlineLobby {
         public void onResponse(Call<User> call, Response<User> response) {
             user = response.body();
             System.out.println(user);
+            gameStartChecker = new GameStartChecker(user, api, startGameCallback);
+            Platform.runLater(() -> createLobbyUI());
         }
 
         @Override
@@ -68,6 +73,9 @@ public class OnlineLobby {
         public void onResponse(Call<Void> call, Response<Void> response) {
             hostList.updateHostList();
             System.out.println("succeeded");
+            if(!gameStartChecker.isGameStarted()) {
+                gameStartChecker.start();
+            }
         }
 
         @Override
@@ -75,20 +83,22 @@ public class OnlineLobby {
             throwable.printStackTrace();
         }
     };
+    private Stage primaryStage;
 
 
-    public OnlineLobby(String apiBaseURL) {
+    public OnlineLobby(String apiBaseURL, StartGameCallback startGameCallback) {
         retrofit = new Retrofit.Builder()
                 .baseUrl(apiBaseURL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+        this.startGameCallback = startGameCallback;
         api = retrofit.create(ChessAPI.class);
         this.hostList = new HostList(windowWidth, api);
     }
 
     public void launch(Stage primaryStage) throws Exception {
+        this.primaryStage = primaryStage;
         NewUser newUser = new NewUser(askUserForNickname());
-        createLobbyUI(primaryStage, newUser);
         Call<String> call = api.registerNewUser(newUser);
         call.enqueue(registerCallback);
     }
@@ -102,13 +112,13 @@ public class OnlineLobby {
         return address.get();
     }
 
-    private void createLobbyUI(Stage stage, NewUser newUser) {
+    private void createLobbyUI() {
 
-        usernameLabel.setText("Nickname: " + newUser.name);
+        usernameLabel.setText("Nickname: " + user.getName());
         usernameLabel.setPadding(new Insets(8));
         VBox root = new VBox();
         root.getChildren().addAll(usernameLabel, hostList.getNode(), createButton());
-        stage.setScene(new Scene(root, windowWidth, windowHeight));
+        primaryStage.setScene(new Scene(root, windowWidth, windowHeight));
     }
 
     private Node createButton() {
@@ -165,6 +175,7 @@ public class OnlineLobby {
         }
         return null;
     }
+
 
 
 
