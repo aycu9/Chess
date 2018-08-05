@@ -113,7 +113,7 @@ public class Main extends Application {
         Player player1 = new LocalPlayer(game, playerChosenTeam, scene);
         player1.start();
         Player player2;
-        player2 = new NetworkPlayer(game, game.getOppositeTeam(playerChosenTeam), apiBaseURL);
+        player2 = new NetworkPlayer(game, game.getOppositeTeam(playerChosenTeam), apiBaseURL, user.getOpponent(), user.getUuid());
         player2.start();
         primaryStage.setScene(scene);
     }

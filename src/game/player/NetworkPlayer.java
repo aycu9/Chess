@@ -17,14 +17,18 @@ import java.net.UnknownHostException;
 
 public class NetworkPlayer extends Player implements UserStateListener {
     private final ChessAPI api;
+    private final String myUUID;
+    private final String opponentUUID;
 
-    public NetworkPlayer(ChessGame chessGame, Team team, String apiBaseURL) {
+    public NetworkPlayer(ChessGame chessGame, Team team, String apiBaseURL, String myUUID, String opponentUUID) {
         super(chessGame, team);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(apiBaseURL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         api = retrofit.create(ChessAPI.class);
+        this.myUUID = myUUID;
+        this.opponentUUID = opponentUUID;
     }
 
     @Override
@@ -43,7 +47,7 @@ public class NetworkPlayer extends Player implements UserStateListener {
         if (team.isSameTeam(this.getTeam())) {
             return;
         }
-//        api.sendUserState(userState).enqueue(new EmptyCallback());
+        api.updateUserState(new UpdateUserStateRequest(opponentUUID, userState)).enqueue(new EmptyCallback());
     }
 
     public void receiveUserStateFromNetwork(UserState state) {

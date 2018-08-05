@@ -24,4 +24,8 @@ public interface ChessAPI {
 
     @POST("start_game")
     Call<Void> startGame (@Body StartGameRequest startGameRequest);
+
+    @POST("user_state")
+    Call<Void> updateUserState (@Body UpdateUserStateRequest updateUserStateRequest);
+
 }
