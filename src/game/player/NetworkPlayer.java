@@ -19,6 +19,8 @@ public class NetworkPlayer extends Player implements UserStateListener {
     private final ChessAPI api;
     private final String myUUID;
     private final String opponentUUID;
+    private final UpdateUserStateListener updateUserStateListener = this::onReceiveUserStateFromNetwork;
+    private final UserStateUpdateChecker userStateUpdateChecker;
 
     public NetworkPlayer(ChessGame chessGame, Team team, String apiBaseURL, String myUUID, String opponentUUID) {
         super(chessGame, team);
@@ -29,6 +31,7 @@ public class NetworkPlayer extends Player implements UserStateListener {
         api = retrofit.create(ChessAPI.class);
         this.myUUID = myUUID;
         this.opponentUUID = opponentUUID;
+        userStateUpdateChecker = new UserStateUpdateChecker(myUUID, api, updateUserStateListener);
     }
 
     @Override
@@ -50,7 +53,10 @@ public class NetworkPlayer extends Player implements UserStateListener {
         api.updateUserState(new UpdateUserStateRequest(opponentUUID, userState)).enqueue(new EmptyCallback());
     }
 
-    public void receiveUserStateFromNetwork(UserState state) {
-        Platform.runLater(() -> getChessGame().dispatchUserState(state));
+    private void onReceiveUserStateFromNetwork(UserState userState) {
+        Platform.runLater(() -> getChessGame().dispatchUserState(userState));
     }
+
+    //todo find when to start the UserStateUpdateChecker. See if it can start only when it is NetworkPlayer's turn and
+    //todo pause when it's LocalPlayer's turn.
 }
