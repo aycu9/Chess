@@ -2,19 +2,30 @@ package api;
 
 import game.BoardState;
 import game.Team;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
+import java.util.List;
+
 public interface ChessAPI {
-    String CONNECT_PATH = "connect";
-    String USERSTATE_PATH = "sendUserState";
+    @POST("register")
+    Call<String> registerNewUser (@Body NewUser newUser);
 
-    @POST(CONNECT_PATH)
-    Call<Void> connectToHost(@Body ConnectionRequest request);
+    @POST("get_user")
+    Call<User> getUser (@Body GetUserRequest getUserRequest);
 
-    @POST(USERSTATE_PATH)
-    Call<Void> sendUserState(@Body UserState state);
+    @GET("host_list")
+    Call<List<Host>> getHostList ();
+
+    @POST("host")
+    Call<Void> hostGame (@Body HostGameRequest hostGameRequest);
+
+    @POST("start_game")
+    Call<Void> startGame (@Body StartGameRequest startGameRequest);
+
+    @POST("user_state")
+    Call<Void> updateUserState (@Body UpdateUserStateRequest updateUserStateRequest);
+
 }
