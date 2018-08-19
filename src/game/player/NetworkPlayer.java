@@ -37,11 +37,15 @@ public class NetworkPlayer extends Player implements UserStateListener {
     @Override
     public void start() {
         getChessGame().addListener(this);
+        if (getTeam().isSameTeam(getChessGame().getBoardState().currentTeam)) {
+            userStateUpdateChecker.start();
+        }
     }
 
     @Override
     public void stop() {
         getChessGame().removeListener(this);
+        userStateUpdateChecker.pause();
     }
 
     //receives UserState from LocalPlayer, sends UserState towards other player through api
@@ -51,12 +55,18 @@ public class NetworkPlayer extends Player implements UserStateListener {
             return;
         }
         api.updateUserState(new UpdateUserStateRequest(opponentUUID, userState)).enqueue(new EmptyCallback());
+        if (getTeam().isSameTeam(getChessGame().getBoardState().currentTeam)) {
+            userStateUpdateChecker.start();
+        }
+
     }
 
     private void onReceiveUserStateFromNetwork(UserState userState) {
-        Platform.runLater(() -> getChessGame().dispatchUserState(userState));
+        Platform.runLater(() -> {
+            getChessGame().dispatchUserState(userState);
+            if (!getTeam().isSameTeam(getChessGame().getBoardState().currentTeam)) {
+                userStateUpdateChecker.pause();
+            }
+        });
     }
-
-    //todo find when to start the UserStateUpdateChecker. See if it can start only when it is NetworkPlayer's turn and
-    //todo pause when it's LocalPlayer's turn.
 }

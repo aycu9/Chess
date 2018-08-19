@@ -45,12 +45,14 @@ public class UserStateUpdateChecker {
     }
 
     private void scheduleNextCall() {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if (hasStarted) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            api.getUser(new GetUserRequest(uuid)).enqueue(callback);
         }
-        api.getUser(new GetUserRequest(uuid)).enqueue(callback);
     }
 
     public void start() {
@@ -58,5 +60,9 @@ public class UserStateUpdateChecker {
             api.getUser(new GetUserRequest(uuid)).enqueue(callback);
         }
         hasStarted = true;
+    }
+
+    public void pause() {
+        hasStarted = false;
     }
 }
